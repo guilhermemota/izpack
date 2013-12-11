@@ -328,6 +328,13 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <distMgmtReleaseId>central</distMgmtReleaseId>
+        <distMgmtReleaseName>Central Repository</distMgmtReleaseName>
+        <distMgmtReleaseUrl>http://ger-redes.datacom.net/nexus/content/repositories/datacom-release/</distMgmtReleaseUrl>
+        <distMgmtSnapshotsId>central-snapshots</distMgmtSnapshotsId>
+        <distMgmtSnapshotsName>Central Repository</distMgmtSnapshotsName>
+        <distMgmtSnapshotsUrl>http://ger-redes.datacom.net/nexus/content/repositories/datacom-snapshots/</distMgmtSnapshotsUrl>
+        <maven.source.classifier>sources-datacom</maven.source.classifier>
     </properties>
 
     <build>
@@ -408,10 +415,21 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>execution-test-jar</id>
                         <goals>
                             <goal>test-jar</goal>
                         </goals>
                     </execution>
+                    <execution>
+                            <id>execution-jar</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <classifier>datacom</classifier>
+                            </configuration>
+                     </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -434,7 +452,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.1.2</version>
+                    <version>2.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -530,13 +548,6 @@
         <profile>
             <!-- See: http://docs.codehaus.org/display/HAUSMATES/Continuous+Integration+-+Snapshots -->
             <id>bamboo-deploy</id>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>izpack-snapshot-bamboo</id>
-                    <name>IzPack's snapshot repository on Bamboo</name>
-                    <url>file:///opt/ci.repository.codehaus.org/</url>
-                </snapshotRepository>
-            </distributionManagement>
         </profile>
 
         <profile>
@@ -664,6 +675,19 @@
         </plugins>
     </reporting>
 
+  <distributionManagement>
+    <repository>
+      <id>${distMgmtReleaseId}</id>
+      <name>${distMgmtReleaseName}</name>
+      <url>${distMgmtReleaseUrl}</url>
+    </repository>
+    <snapshotRepository>
+      <id>${distMgmtSnapshotsId}</id>
+      <name>${distMgmtSnapshotsName}</name>
+      <url>${distMgmtSnapshotsUrl}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
     <scm>
         <connection>scm:git:git://git.codehaus.org/izpack.git</connection>
         <developerConnection>scm:git:ssh://git@git.codehaus.org/izpack.git</developerConnection>
@@ -742,13 +766,6 @@
         <system>jira</system>
         <url>http://jira.codehaus.org/browse/IZPACK</url>
     </issueManagement>
-
-    <distributionManagement>
-        <site>
-            <id>codehaus.org</id>
-            <url>dav:https://dav.codehaus.org/izpack/</url>
-        </site>
-    </distributionManagement>
 
 </project>
 

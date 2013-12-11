@@ -16,7 +16,8 @@
             <!-- required by IzpackGenerationTest -->
             <groupId>${project.groupId}</groupId>
             <artifactId>izpack-dist</artifactId>
-            <classifier>sources</classifier>
+            <version>5.0.0-rc2-SNAPSHOT</version>
+            <classifier>${maven.source.classifier}</classifier>
         </dependency>
 
         <dependency>
@@ -87,7 +88,7 @@
                         </goals>
                         <configuration>
                             <includeArtifactIds>izpack-dist</includeArtifactIds>
-                            <includeClassifiers>sources</includeClassifiers>
+                            <includeClassifiers>${maven.source.classifier}</includeClassifiers>
                             <excludeTransitive>true</excludeTransitive>
                             <outputDirectory>${basedir}/target/test-classes/samples/izpack</outputDirectory>
                         </configuration>
