@@ -130,7 +130,7 @@ public class UninstallerFrame extends JFrame
     public UninstallerFrame(Destroyer destroyer, InstallLog log, Housekeeper housekeeper, Messages messages)
             throws Exception
     {
-        super("IzPack - Uninstaller");
+        super(messages.get("uninstaller.uninstall"));
         this.destroyer = destroyer;
         this.log = log;
         this.housekeeper = housekeeper;
