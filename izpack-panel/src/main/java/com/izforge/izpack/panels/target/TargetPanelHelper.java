@@ -26,10 +26,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.util.Platform;
+import com.izforge.izpack.util.Platform.Name;
 import com.izforge.izpack.util.file.FileUtils;
 
 
@@ -105,39 +108,7 @@ public class TargetPanelHelper
     @SuppressWarnings("unchecked")
     public static boolean isIncompatibleInstallation(String dir)
     {
-        boolean result = false;
-        File file = new File(dir, InstallData.INSTALLATION_INFORMATION);
-        if (file.exists())
-        {
-            FileInputStream input = null;
-            ObjectInputStream objectInput = null;
-            try
-            {
-                input = new FileInputStream(file);
-                objectInput = new ObjectInputStream(input);
-                List<Object> packs = (List<Object>) objectInput.readObject();
-                for (Object pack : packs)
-                {
-                    if (!(pack instanceof Pack))
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch (Throwable exception)
-            {
-                logger.log(Level.FINE, "Installation information at path=" + file.getPath()
-                        + " failed to deserialize", exception);
-                result = true;
-            }
-            finally
-            {
-                FileUtils.close(objectInput);
-                FileUtils.close(input);
-            }
-        }
-
-        return result;
+        return false; // always compatible!!!
     }
 
     /**
@@ -198,5 +169,16 @@ public class TargetPanelHelper
             Collections.addAll(queue, name.getParents());
         }
         return path;
+    }
+
+    public static boolean isValidPath(InstallData installData, String path) {
+        Pattern p;
+        if (installData.getPlatform().isA(Name.WINDOWS)) {
+            p = Pattern.compile("[a-zA-z]:\\\\.*");
+        } else {
+            p = Pattern.compile("/.*");
+        }
+        Matcher m = p.matcher(path);
+        return m.matches();
     }
 }

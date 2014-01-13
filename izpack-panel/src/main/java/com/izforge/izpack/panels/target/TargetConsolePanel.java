@@ -109,6 +109,12 @@ public class TargetConsolePanel extends AbstractConsolePanel implements ConsoleP
             }
             else if (!path.isEmpty())
             {
+                if ( !TargetPanelHelper.isValidPath(installData, path) ) {
+                    console.println(installData.getMessages().get("installer.error") + ": "
+                        + installData.getMessages().get("UserInputPanel.dir.notdirectory.caption") + ". "
+                        + installData.getMessages().get("UserInputPanel.dir.nodirectory.message"));
+                    return run(installData, console);
+                }
                 File selectedDir = new File(path);
                 if (selectedDir.exists() && selectedDir.isDirectory() && selectedDir.list().length > 0)
                 {

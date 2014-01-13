@@ -39,6 +39,7 @@ import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
+import com.izforge.izpack.panels.target.TargetPanelHelper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Platforms;
 
@@ -172,9 +173,15 @@ public class PathInputPanel extends IzPanel implements ActionListener
     {
         String path = getPath();
 
-        if (path.length() == 0 && !checkEmptyPath())
+        if (path.length() == 0 /*&& !checkEmptyPath()*/)
         {
+            emitError(getString("installer.error"), getI18nStringForClass("empty_target_is_forbidden", "TargetPanel"));
             // Empty path disallowed
+            return false;
+        }
+
+        if ( !TargetPanelHelper.isValidPath(installData, path) ) {
+            emitError(getString("installer.error") + " - " + getString("UserInputPanel.dir.notdirectory.caption"), getString(getI18nStringForClass("dir.nodirectory.message", "UserInputPanel")));
             return false;
         }
 
