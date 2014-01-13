@@ -311,7 +311,8 @@ public abstract class UnpackerBase implements IUnpacker
             if (exception instanceof ResourceInterruptedException)
             {
                 prompt.message(Type.INFORMATION, messages.get("installer.cancelled"));
-            } else
+            }
+            else
             {
                 IzPackException ize;
                 if (exception instanceof InstallerException)
@@ -320,10 +321,12 @@ public abstract class UnpackerBase implements IUnpacker
                     Throwable t = ie.getCause();
                     ize = new IzPackException(messages.get("installer.errorMessage"),
                             t != null ? t : exception);
-                } else if (exception instanceof IzPackException)
+                }
+                else if (exception instanceof IzPackException)
                 {
-                    ize = (IzPackException) exception;
-                } else
+                    ize = (IzPackException)exception;
+                }
+                else
                 {
                     ize = new IzPackException(exception.getMessage(), exception);
                 }
@@ -386,7 +389,8 @@ public abstract class UnpackerBase implements IUnpacker
         if (isInterruptDisabled())
         {
             result = false;
-        } else
+        }
+        else
         {
             synchronized (this)
             {
@@ -402,7 +406,8 @@ public abstract class UnpackerBase implements IUnpacker
                         // do nothing
                     }
                     result = state == State.INTERRUPTED;
-                } else
+                }
+                else
                 {
                     result = true;
                 }
@@ -439,7 +444,7 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Invoked prior to unpacking.
      * <p/>
-     * This notifies the {@link ProgressListener}, and any registered {@link InstallerListener listeners}.
+     * This notifies the {@link #getProgressListener listener}, and any registered {@link InstallerListener listeners}.
      *
      * @param packs the packs to unpack
      * @throws InstallerException for any error
@@ -454,10 +459,10 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Unpacks the selected packs.
      *
-     * @param packs the packs to unpack
-     * @param queue the file queue, or {@code null} if queuing is not supported
+     * @param packs        the packs to unpack
+     * @param queue        the file queue, or {@code null} if queuing is not supported
      * @throws ResourceInterruptedException if unpacking is cancelled
-     * @throws InstallerException           for any error
+     * @throws InstallerException              for any error
      */
     protected void unpack(List<PackInfo> packs, FileQueue queue) throws InstallerException
     {
@@ -497,9 +502,12 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Unpacks a pack.
      *
-     * @param packInfo the pack info of the current pack
-     * @param packNo   the pack number
-     * @param queue    the file queue, or {@code null} if queuing is not supported
+     * @param pack         the pack to unpack
+     * @param packNo       the pack number
+     * @param queue        the file queue, or {@code null} if queuing is not supported
+     * @param parsables    used to collect parsable files in the pack
+     * @param executables  used to collect executable files files in the pack
+     * @param updateChecks used to collect update checks in the pack
      * @throws IzPackException for any error
      */
     protected void unpack(PackInfo packInfo, int packNo, FileQueue queue, List<ParsableFile> parsables,
@@ -578,7 +586,7 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Unpacks a pack file.
      *
-     * @param packFile        the pack file
+     * @param file            the pack file
      * @param packInputStream the pack file input stream
      * @param fileNo          the pack file number
      * @param pack            the pack that the pack file comes from
@@ -633,7 +641,7 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Extracts a pack file.
      *
-     * @param packFile        the pack file
+     * @param file            the pack file
      * @param target          the file to write to
      * @param packInputStream the pack file input stream
      * @param pack            the pack that the pack file comes from
@@ -692,7 +700,7 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Skips a pack file.
      *
-     * @param packFile        the pack file
+     * @param file            the pack file
      * @param pack            the pack
      * @param packInputStream the pack stream
      * @throws IOException if the file cannot be skipped
@@ -715,6 +723,7 @@ public abstract class UnpackerBase implements IUnpacker
      * @param queue       the file queue. May be {@code null}
      * @param cancellable determines if the unpacker should be cancelled
      * @return the unpacker
+     * @throws IOException        for any I/O error
      * @throws InstallerException for any installer error
      */
     protected FileUnpacker createFileUnpacker(PackFile file, Pack pack, FileQueue queue, Cancellable cancellable)
@@ -741,8 +750,8 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Invoked after each pack has been unpacked.
      *
-     * @param packs the packs
-     * @param queue the file queue, or {@code null} if queuing is not supported
+     * @param packs        the packs
+     * @param queue        the file queue, or {@code null} if queuing is not supported
      * @throws ResourceInterruptedException if installation is cancelled
      * @throws IOException                  for any I/O error
      */
@@ -864,14 +873,11 @@ public abstract class UnpackerBase implements IUnpacker
         {
             if (messages != null)
             {
-                try
-                {
-                    packMessages = messages.newMessages(Resources.PACK_TRANSLATIONS_RESOURCE_NAME);
-                }
-                catch (Exception ex)
-                {
-                    logger.fine(ex.getLocalizedMessage());
-                }
+              try {
+                packMessages = messages.newMessages(Resources.PACK_TRANSLATIONS_RESOURCE_NAME);
+              } catch (Exception ex){
+                logger.fine(ex.getLocalizedMessage());
+              }
             }
         }
 
@@ -900,7 +906,8 @@ public abstract class UnpackerBase implements IUnpacker
                 {
                     throw new IzPackException("Could not create directory: " + dir.getPath());
                 }
-            } else
+            }
+            else
             {
                 File parent = dir.getParentFile();
                 if (parent != null)
@@ -977,7 +984,8 @@ public abstract class UnpackerBase implements IUnpacker
             state = State.INTERRUPTED;
             result = true;
             notifyAll(); // notify threads waiting in interrupt()
-        } else
+        }
+        else
         {
             if (state == State.INTERRUPTED)
             {
@@ -1096,7 +1104,8 @@ public abstract class UnpackerBase implements IUnpacker
                 if (!f.delete())
                 {
                     logger.warning("Cleanup: Unable to delete file " + f);
-                } else
+                }
+                else
                 {
                     logger.fine("Cleanup: Deleted file " + f);
                 }
@@ -1127,7 +1136,8 @@ public abstract class UnpackerBase implements IUnpacker
                 if (!d.delete())
                 {
                     logger.warning("Cleanup: Unable to delete directory " + d);
-                } else
+                }
+                else
                 {
                     logger.fine("Cleanup: Deleted directory " + d);
                 }
@@ -1170,14 +1180,15 @@ public abstract class UnpackerBase implements IUnpacker
             {
                 throw new InstallerException("Failed to create file: " + installationInfo);
             }
-        } else
+        }
+        else
         {
             logger.fine("Previous installation information found");
             // read in old information and update
             FileInputStream fin = new FileInputStream(installationInfo);
             ObjectInputStream oin = new ObjectInputStream(fin);
 
-            List<Pack> packs;
+            List<Pack> packs = null;
             try
             {
                 //noinspection unchecked
@@ -1185,14 +1196,19 @@ public abstract class UnpackerBase implements IUnpacker
             }
             catch (Exception exception)
             {
-                throw new InstallerException("Failed to read previous installation information", exception);
+                // exception if old information is from IzPack 4.x
+                // there's no need to raise an error in such situation
+                // one can simply ignore it
             }
             finally
             {
                 IOUtils.closeQuietly(oin);
                 IOUtils.closeQuietly(fin);
             }
-            installedPacks.addAll(packs);
+            if ( packs != null )
+            {
+                installedPacks.addAll(packs);
+            }
         }
 
         FileOutputStream fout = new FileOutputStream(installationInfo);
@@ -1240,7 +1256,8 @@ public abstract class UnpackerBase implements IUnpacker
             if (pf.override() == OverrideType.OVERRIDE_TRUE)
             {
                 result = true;
-            } else
+            }
+            else
             {
                 if (pf.override() == OverrideType.OVERRIDE_UPDATE)
                 {
@@ -1253,14 +1270,16 @@ public abstract class UnpackerBase implements IUnpacker
                     // file or record with which mtime
                     // it was installed...)
                     result = (file.lastModified() < pf.lastModified());
-                } else
+                }
+                else
                 {
                     Option defChoice = null;
 
                     if (pf.override() == OverrideType.OVERRIDE_ASK_FALSE)
                     {
                         defChoice = Option.NO;
-                    } else if (pf.override() == OverrideType.OVERRIDE_ASK_TRUE)
+                    }
+                    else if (pf.override() == OverrideType.OVERRIDE_ASK_TRUE)
                     {
                         defChoice = Option.YES;
                     }
@@ -1269,7 +1288,8 @@ public abstract class UnpackerBase implements IUnpacker
                     if (Installer.getInstallerMode() == INSTALLER_AUTO)
                     {
                         result = (defChoice == Option.YES);
-                    } else // ask the user
+                    }
+                    else // ask the user
                     {
                         Option answer = prompt.confirm(Type.QUESTION,
                                 messages.get("InstallPanel.overwrite.title") + " - " + file.getName(),
@@ -1315,20 +1335,23 @@ public abstract class UnpackerBase implements IUnpacker
                 {
                     throw new InstallerException("The file " + file + " could not be renamed to " + newPathFile);
                 }
-            } else
+            }
+            else
             {
                 throw new InstallerException("File name " + file.getName() + " cannot be mapped using the expression \""
-                        + pf.overrideRenameTo() + "\"");
+                                                     + pf.overrideRenameTo() + "\"");
             }
         }
     }
 
 
     /**
-     * Initializes {@link ParsableFile parseable files} according to the current environment.
+     * Reads {@link ParsableFile parseable files} from the supplied stream.
      *
-     * @param packInfo  the pack info fpor the current pack
+     * @param stream    the stream to read from
      * @param parsables used to collect the read objects
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if the class of a serialised object cannot be found
      */
     protected void readParsableFiles(PackInfo packInfo, List<ParsableFile> parsables)
     {
@@ -1345,10 +1368,12 @@ public abstract class UnpackerBase implements IUnpacker
     }
 
     /**
-     * Initializes {@link ExecutableFile executable files} according to the current environment.
+     * Reads {@link ExecutableFile executable files} from the supplied stream.
      *
-     * @param packInfo    the pack info fpor the current pack
+     * @param stream      the stream to read from
      * @param executables used to collect the read objects
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if the class of a serialised object cannot be found
      */
     protected void readExecutableFiles(PackInfo packInfo, List<ExecutableFile> executables)
     {
@@ -1377,10 +1402,12 @@ public abstract class UnpackerBase implements IUnpacker
     }
 
     /**
-     * Initializes {@link UpdateCheck update checks} according to the current environment.
+     * Reads {@link UpdateCheck update checks} from the supplied stream.
      *
-     * @param packInfo     the pack info fpor the current pack
+     * @param stream       the stream to read from
      * @param updateChecks used to collect the read objects
+     * @throws IOException            for any I/O error
+     * @throws ClassNotFoundException if the class of a serialised object cannot be found
      */
     protected void readUpdateChecks(PackInfo packInfo, List<UpdateCheck> updateChecks)
     {
