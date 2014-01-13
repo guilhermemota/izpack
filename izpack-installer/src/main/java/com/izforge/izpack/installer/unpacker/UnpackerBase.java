@@ -1114,18 +1114,23 @@ public abstract class UnpackerBase implements IUnpacker
             FileInputStream fin = new FileInputStream(installationInfo);
             ObjectInputStream oin = new ObjectInputStream(fin);
 
-            List<Pack> packs;
+            List<Pack> packs = null;
             try
             {
                 packs = (List<Pack>) oin.readObject();
             }
             catch (Exception exception)
             {
-                throw new InstallerException("Failed to read previous installation information", exception);
+                // exception if old information is from IzPack 4.x
+                // there's no need to raise an error in such situation
+                // one can simply ignore it
             }
-            for (Pack pack : packs)
+            if ( packs != null )
             {
-                installedPacks.add(pack);
+                for (Pack pack : packs)
+                {
+                    installedPacks.add(pack);
+                }
             }
             FileUtils.close(oin);
             FileUtils.close(fin);
