@@ -404,10 +404,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <distMgmtReleaseId>central</distMgmtReleaseId>
         <distMgmtReleaseName>Central Repository</distMgmtReleaseName>
-        <distMgmtReleaseUrl>http://ger-redes.datacom.net/nexus/content/repositories/datacom-release/</distMgmtReleaseUrl>
+        <distMgmtReleaseUrl>http://ger-redes.datacom.net/nexus/content/repositories/thirdparty/</distMgmtReleaseUrl>
         <distMgmtSnapshotsId>central-snapshots</distMgmtSnapshotsId>
         <distMgmtSnapshotsName>Central Repository</distMgmtSnapshotsName>
-        <distMgmtSnapshotsUrl>http://ger-redes.datacom.net/nexus/content/repositories/datacom-snapshots/</distMgmtSnapshotsUrl>
+        <distMgmtSnapshotsUrl>http://ger-redes.datacom.net/nexus/content/repositories/3rd-party-snapshots/</distMgmtSnapshotsUrl>
         <maven.source.classifier>sources-datacom</maven.source.classifier>
     </properties>
 
