@@ -318,7 +318,7 @@ public class InstallationGroupPanel extends IzPanel
         descriptionField.setEditable(false);
         descriptionField.setOpaque(false);
         descriptionField.setText("<b>Install group description text</b>");
-        descriptionField.setContentType("text/html");
+        descriptionField.setFont(getControlTextFont());
         descriptionField.setBorder(
                 new TitledBorder(getString("PacksPanel.description")));
         gridBagConstraints = new java.awt.GridBagConstraints();
