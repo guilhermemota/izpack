@@ -33,6 +33,7 @@ import com.izforge.izpack.installer.console.ConsolePanel;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.panel.PanelView;
 import com.izforge.izpack.util.Console;
+import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.PlatformModelMatcher;
 
 import java.io.File;
@@ -106,6 +107,14 @@ public class FinishConsolePanel extends AbstractConsolePanel
             generateAutoInstallScript(installData, uninstallData, console);
         }
 
+        String tempLogFile = installData.getVariable("tempLogFile");
+        final String tempLogFilePath = installData.getInstallPath() + File.separator + tempLogFile;
+        boolean caseInSensitiveSearch = true;
+        boolean errorFound = FileUtil.fileContains(tempLogFilePath , "BUILD FAILED", caseInSensitiveSearch);
+        if (errorFound) {
+            installData.setInstallSuccess(false);
+        }
+
         if (installData.isInstallSuccess())
         {
             console.println("Installation was successful");
@@ -113,7 +122,10 @@ public class FinishConsolePanel extends AbstractConsolePanel
         }
         else
         {
-            console.println("Installation failed!");
+            console.println("Installation failed!!!");
+            console.println("The installation might not have completely succeeded! Check the file:");
+            console.println();
+            console.println(tempLogFilePath);
         }
         return true;
     }

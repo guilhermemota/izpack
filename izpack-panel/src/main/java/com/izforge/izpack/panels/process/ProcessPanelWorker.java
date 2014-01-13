@@ -331,6 +331,7 @@ public class ProcessPanelWorker implements Runnable
             {
                 File tempLogFile = File.createTempFile("Install_" + identifier + "_", ".log",
                                                        new File(logfiledir));
+                idata.setVariable("tempLogFile", tempLogFile.getName());
                 logfile = new PrintWriter(new FileOutputStream(tempLogFile), true);
             }
             catch (IOException e)

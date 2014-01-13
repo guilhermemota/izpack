@@ -19,6 +19,10 @@
 
 package com.izforge.izpack.panels.simplefinish;
 
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 
 import javax.swing.JLabel;
@@ -33,6 +37,7 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
+import com.izforge.izpack.util.FileUtil;
 
 /**
  * The simple finish panel class.
@@ -86,6 +91,15 @@ public class SimpleFinishPanel extends IzPanel
      */
     public void panelActivate()
     {
+
+        String tempLogFile = installData.getVariable("tempLogFile");
+        final String tempLogFilePath = installData.getInstallPath() + File.separator + tempLogFile;
+        boolean caseInSensitiveSearch = true;
+        boolean errorFound = FileUtil.fileContains(tempLogFilePath , "BUILD FAILED", caseInSensitiveSearch);
+        if (errorFound) {
+            this.installData.setInstallSuccess(false);
+        }
+
         parent.lockNextButton();
         parent.lockPrevButton();
         parent.setQuitButtonText(getString("FinishPanel.done"));
@@ -118,6 +132,34 @@ public class SimpleFinishPanel extends IzPanel
         {
             add(LabelFactory.create(getString("FinishPanel.fail"),
                                     parent.getIcons().get("stop"), LEADING));
+            add(IzPanelLayout.createVerticalStrut(5));
+            add(LabelFactory.create(getString("FinishPanel.fail.check.file"), null, LEADING), NEXT_LINE);
+            JLabel tempLogFileLabel = LabelFactory.create("<HTML><BODY><A HREF='#'>"+tempLogFile+"</A></BODY></HTML>", null, LEADING);
+            tempLogFileLabel.setToolTipText(tempLogFilePath);
+            tempLogFileLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            tempLogFileLabel.addMouseListener( new MouseListener() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                }
+                @Override
+                public void mousePressed(MouseEvent e) {
+                }
+                @Override
+                public void mouseExited(MouseEvent e) {
+                }
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                }
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    try {
+                        Desktop.getDesktop().open(new File(tempLogFilePath));
+                    } catch (Exception exc) {
+                        throw new RuntimeException(exc.getMessage(), exc);
+                    }
+                }
+            });
+            add(tempLogFileLabel, NEXT_LINE);
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
         log.informUser();
