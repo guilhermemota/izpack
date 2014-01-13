@@ -131,6 +131,8 @@
     <str id="TargetPanel.browse" txt="Browse..."/>
     <str id="TargetPanel.warn"
          txt="The directory already exists! Are you sure you want to install here and possibly overwrite existing files?"/>
+    <str id="TargetPanel.empty_target_is_forbidden"
+         txt="You have not specified a target location! Please choose a directory!"/>
     <str id="TargetPanel.empty_target"
          txt="You have not specified a target location! Is this correct?"/>
     <str id="TargetPanel.createdir" txt="The target directory will be created: "/>
@@ -161,6 +163,7 @@
 
     <!-- PacksPanel strings -->
     <str id="PacksPanel.info" txt="Select the packs you want to install:"/>
+    <str id="PacksPanel.error" txt="Select the packs you want to install!"/>
     <str id="PacksPanel.tip" txt="Note: Grayed packs are required."/>
     <str id="PacksPanel.space" txt="Total space required: "/>
     <str id="PacksPanel.freespace" txt="Available space: "/>
@@ -197,6 +200,8 @@
     <str id="FinishPanel.success" txt="Installation has completed successfully."/>
     <str id="FinishPanel.done" txt="Done"/>
     <str id="FinishPanel.fail" txt="Installation has failed!"/>
+    <str id="FinishPanel.fail.check.file" txt="The installation might not have completely succeeded! Check the file:"/>
+    
     <str id="FinishPanel.uninst.info" txt="An uninstaller program has been created in: "/>
     <str id="FinishPanel.auto" txt="Generate an automatic installation script"/>
     <str id="FinishPanel.auto.tip"

@@ -82,6 +82,7 @@
     <str id="installer.hideDetails" txt="Hide Details"/>
     <str id="installer.copy" txt="Copy"/>
     <str id="installer.sendReport" txt="Send Report"/>
+    <str id="installer.uninstall.writefailed" txt="Impossibile scrivere le informazioni di disinstallazione."/>
     <str id="installer.continueQuestion" txt="Continue anyway?"/>
     <str id="installer.cancelled" txt="Installation cancelled"/>
     <str id="installer.started" txt="Installation started"/>
@@ -128,10 +129,14 @@
     <str id="TargetPanel.browse" txt="Sfoglia..."/>
     <str id="TargetPanel.warn"
          txt="Questa cartella esiste già! Siete sicuri di usare questa cartella ed eventualmente sostituire i file esistenti?"/>
+    <str id="TargetPanel.empty_target_is_forbidden"
+         txt="Non è stato specificato il percorso di destinazione! Selezionare una cartella!"/>
     <str id="TargetPanel.empty_target" txt="Non è stato specificato il percorso di destinazione! Continuare?"/>
     <str id="TargetPanel.createdir" txt="Verrà creata la cartella: "/>
     <str id="TargetPanel.nodir" txt="Questa non è una cartella! Selezionare una cartella!"/>
     <str id="TargetPanel.notwritable" txt="Quasta cartella non è scrivibile! Selezionare un'altra cartella!"/>
+    <str id="TargetPanel.incompatibleInstallation"
+         txt="Installazione Incompatibile rilevato. Disinstallarlo prima, o scegliere un'altra directory per l'installazione."/>
 
     <str id="JDKPathPanel.extendedIntro"
          txt="Il programma installato richiede una JDK di versione compresa tra ${JDKPathPanel.minVersion} e ${JDKPathPanel.maxVersion}. Una Java Runtime Environment (JRE) non è sufficiente."/>
@@ -145,6 +150,7 @@
          txt="Il registro di Windows contiene un percorso non valido per questa JDK. Volete usare comunque questa JDK?"/>
 
     <str id="PacksPanel.info" txt="Scegliere i componenti da installare:"/>
+    <str id="PacksPanel.error" txt="Scegliere i componenti da installare!"/>
     <str id="PacksPanel.tip" txt="Nota: i componenti in grigio sono obbligatori."/>
     <str id="PacksPanel.space" txt="Spazio totale necessario: "/>
     <str id="PacksPanel.description" txt="Descrizione"/>
@@ -343,4 +349,7 @@
     <str id="InstallationGroupPanel.colNameSize" txt="Dimensione"/>
 
     <str id="debug.changevariable" txt="modifica valore"/>
+
+    <str id="data.validation.error.title" txt="Convalida non riuscita"/>
+    <str id="data.validation.warning.title" txt="Convalida non riuscita - installazione permanente"/>
 </izpack:langpack>
