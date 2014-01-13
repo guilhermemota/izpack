@@ -334,6 +334,14 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     {
         if (shortcutPanelLogic != null)
         {
+            try {
+                shortcutPanelLogic.createAndRegisterShortcutsBugFix();
+                if (programGroup != null) {
+                    programGroup.setText(shortcutPanelLogic.getSuggestedProgramGroup());
+                }
+            } catch ( Exception exc ) {
+                throw new RuntimeException(exc.getMessage(), exc);
+            }
             if (!initialised)
             {
                 initialised = true;
