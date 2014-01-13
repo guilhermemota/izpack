@@ -339,7 +339,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         JPanel navPanel = new JPanel();
         navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.X_AXIS));
         TitledBorder border = BorderFactory.createTitledBorder(
-                new EtchedLineBorder(), messages.get("installer.madewith") + " ",
+                new EtchedLineBorder(), messages.get("installer.madewith"),
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.PLAIN, 10));
         navPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8), border));
 
