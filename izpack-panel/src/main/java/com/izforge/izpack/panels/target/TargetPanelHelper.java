@@ -31,7 +31,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.izforge.izpack.util.Platform.Name;
 
 /**
  * Target panel helper methods.
@@ -105,46 +108,13 @@ public class TargetPanelHelper
      * and not contain recognised {@link Pack} instances.
      *
      * @param dir the path to check
-     * @param readInstallationInformation check .installationinformation file or skip it
      * @return {@code true} if there is incompatible installation information,
      *         {@code false} if there is no installation info, or it is compatible
      */
     @SuppressWarnings("unchecked")
     public static boolean isIncompatibleInstallation(String dir, Boolean readInstallationInformation)
     {
-        boolean result = false;
-        File file = new File(dir, InstallData.INSTALLATION_INFORMATION);
-        if (file.exists() && readInstallationInformation)
-        {
-            FileInputStream input = null;
-            ObjectInputStream objectInput = null;
-            try
-            {
-                input = new FileInputStream(file);
-                objectInput = new ObjectInputStream(input);
-                List<Object> packs = (List<Object>) objectInput.readObject();
-                for (Object pack : packs)
-                {
-                    if (!(pack instanceof Pack))
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch (Throwable exception)
-            {
-                logger.log(Level.FINE, "Installation information at path=" + file.getPath()
-                        + " failed to deserialize", exception);
-                result = true;
-            }
-            finally
-            {
-                IOUtils.closeQuietly(objectInput);
-                IOUtils.closeQuietly(input);
-            }
-        }
-
-        return result;
+        return false; // always compatible!!!
     }
 
     /**
@@ -205,5 +175,16 @@ public class TargetPanelHelper
             Collections.addAll(queue, name.getParents());
         }
         return path;
+    }
+
+    public static boolean isValidPath(InstallData installData, String path) {
+        Pattern p;
+        if (installData.getPlatform().isA(Name.WINDOWS)) {
+            p = Pattern.compile("[a-zA-z]:\\\\.*");
+        } else {
+            p = Pattern.compile("/.*");
+        }
+        Matcher m = p.matcher(path);
+        return m.matches();
     }
 }

@@ -30,6 +30,9 @@ import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
+import com.izforge.izpack.panels.target.TargetPanelHelper;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.Platforms;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,7 +41,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Base class for panels which asks for paths to directories.
+ * Base class for panels which asks for paths.
  *
  * FIXME Uses un-mockable static calls to PathInputBase
  * FIXME Injecting an instance of PathInputBase would solve testing issues
@@ -164,6 +167,11 @@ public class PathInputPanel extends IzPanel implements ActionListener
         if (normalizedPath.length() == 0 && !checkEmptyPath())
         {
             // Empty path disallowed
+            return false;
+        }
+
+        if ( !TargetPanelHelper.isValidPath(installData, path) ) {
+            emitError(getString("installer.error") + " - " + getString("UserInputPanel.dir.notdirectory.caption"), getString(getI18nStringForClass("dir.nodirectory.message", "UserInputPanel")));
             return false;
         }
 
