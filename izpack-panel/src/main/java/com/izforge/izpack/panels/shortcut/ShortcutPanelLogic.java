@@ -229,6 +229,18 @@ public class ShortcutPanelLogic implements CleanupClient
         addToUninstaller();
     }
 
+    public void createAndRegisterShortcutsBugFix() throws Exception
+    {
+        String groupName = this.groupName;
+        boolean createShortcuts = this.createShortcuts;
+        boolean createDesktopShortcuts = this.createDesktopShortcuts;
+        readShortcutSpec();  // need to re-read the specs now as variable replacement needs to be done
+        analyzeShortcutSpec();
+        this.groupName = groupName;
+        this.createShortcuts = createShortcuts;
+        this.createDesktopShortcuts = createDesktopShortcuts;
+    }
+
     /**
      * @param user type of the user {@link Shortcut#ALL_USERS} or {@link Shortcut#CURRENT_USER}
      * @return a list of progrma group names.
