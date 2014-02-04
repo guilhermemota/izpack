@@ -961,7 +961,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      *
      * @param row the row
      */
-    private void togglePack(int row)
+    protected void togglePack(int row)
     {
         Integer checked = (Integer) packsModel.getValueAt(row, 0);
         checked = (checked <= 0) ? 1 : 0;

@@ -165,12 +165,12 @@ public class Packager extends PackagerBase
 
                 // use a back reference if file was in previous pack, and in
                 // same jar
-                Object[] info = storedFiles.get(file);
-                if (info != null && !packSeparateJars())
-                {
-                    packFile.setPreviousPackFileRef((String) info[0], (Long) info[1]);
-                    addFile = false;
-                }
+//                Object[] info = storedFiles.get(file);
+//                if (info != null && !packSeparateJars())
+//                {
+//                    packFile.setPreviousPackFileRef((String) info[0], (Long) info[1]);
+//                    addFile = false;
+//                }
 
                 objOut.writeObject(packFile); // base info
 

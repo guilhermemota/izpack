@@ -68,7 +68,9 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.event.ProgressListener;
@@ -535,6 +537,9 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     protected void switchPanel(IzPanelView newPanel, IzPanelView oldPanel)
     {
+
+        revaluateDynamicAttributes(newPanel.getInstallData());
+
         int oldIndex = (oldPanel != null) ? oldPanel.getIndex() : -1;
         logger.fine("Switching panel, old index is " + oldIndex);
 
@@ -627,6 +632,39 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             logger.log(Level.SEVERE, "Error when switching panel", e);
         }
+    }
+
+    public static void revaluateDynamicAttributes(InstallData installData) {
+        List<Pack> packs = installData.getAllPacks();
+        // System.out.println("\nswitchPanel new: " + newPanel.getPanel().getClassName() + " ("+packs.size() + " packs) [");
+        if (packs != null) {
+            for (Pack pack : packs) {
+                // System.out.println(String.format("\tpack: %1$-25s req? %2$-25s pre? %3$-25s", pack.getLangPackId(), pack.isRequired(), pack.isPreselected()));
+                pack.setRequired(parseYesNoDynamic(pack.getRequiredExpr(), installData));
+                if (pack.getExcludeGroup() == null) {
+                    pack.setPreselected(parseYesNoDynamic(pack.getPreselectedExpr(), installData));
+                }
+                pack.setReadonly(parseYesNoDynamic(pack.getReadonlyExpr(), installData));
+                // System.out.println(String.format("\t      %1$-20s orig req? %2$-20s orig pre? %3$-25s", "", pack.getRequiredExpr(), pack.getPreselectedExpr()));
+                // System.out.println(String.format("\t      %1$-20s  new req? %2$-20s  new pre? %3$-25s", "", pack.isRequired(), pack.isPreselected()));
+            }
+        }
+        // System.out.println("]");
+    }
+
+    private static boolean parseYesNoDynamic(String expr, InstallData installData) {
+        if (expr == null) {
+            return false; 
+        } else if (expr.equalsIgnoreCase("yes") || expr.equalsIgnoreCase("true")) {
+            return true; 
+        } else if (expr.equalsIgnoreCase("no") || expr.equalsIgnoreCase("false")) {
+            return false; 
+        } else if (expr.startsWith("${") && expr.endsWith("}")) {
+            return Boolean.parseBoolean(installData.getVariable(expr).substring(2, expr.length() - 1)); 
+        } else if (expr.startsWith("$")) {
+            return Boolean.parseBoolean(installData.getVariable(expr).substring(1)); 
+        }
+        return installData.getRules().getCondition(expr).isTrue();
     }
 
     /**
