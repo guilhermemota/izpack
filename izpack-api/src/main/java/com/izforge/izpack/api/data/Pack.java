@@ -119,6 +119,19 @@ public class Pack implements Serializable
     private final boolean required;
 
     /**
+     * Original value for attribute "required" from "install-script.xml".
+     * 
+     * How it works:
+     * Every time a panel is switched, the boolean value "required" will be revaluated based on this String original definition:
+     * <ul>
+     *      <li>if "yes"/"true" or "no"/"false", it will be converted to a boolean (it's a constant);</li>
+     *      <li>if starts with $ or ${}, it will be evaluated as a IzPack variable;</li>
+     *      <li>otherwise, it will be evaluated as a IzPack condition.</li>
+     * </ul>
+     */
+    private String requiredExpr;
+
+    /**
      * The size of the pack. This may include reserved space, independent of the size of the files.
      */
     private long size;
@@ -132,6 +145,37 @@ public class Pack implements Serializable
      * Determines if the pack should be preselected for installation.
      */
     private boolean preselected;
+
+    /**
+     * Original value for attribute "preselected" from "install-script.xml".
+     * 
+     * How it works:
+     * Every time a panel is switched, the boolean value "preselected" will be revaluated based on this String original definition:
+     * <ul>
+     *      <li>if "yes"/"true" or "no"/"false", it will be converted to a boolean (it's a constant);</li>
+     *      <li>if starts with $ or ${}, it will be evaluated as a IzPack variable;</li>
+     *      <li>otherwise, it will be evaluated as a IzPack condition.</li>
+     * </ul>
+     */
+    private String preselectedExpr;
+
+    /**
+     * Determines if the pack should be read only.
+     */
+    private boolean readonly;
+
+    /**
+     * Original value for attribute "readonly" from "install-script.xml".
+     * 
+     * How it works:
+     * Every time a panel is switched, the boolean value "readonly" will be revaluated based on this String original definition:
+     * <ul>
+     *      <li>if "yes"/"true" or "no"/"false", it will be converted to a boolean (it's a constant);</li>
+     *      <li>if starts with $ or ${}, it will be evaluated as a IzPack variable;</li>
+     *      <li>otherwise, it will be evaluated as a IzPack condition.</li>
+     * </ul>
+     */
+    private String readonlyExpr;
 
     /**
      * Parent pack name. May be {@code null}
@@ -357,6 +401,15 @@ public class Pack implements Serializable
         return required;
     }
 
+    public String getRequiredExpr()
+    {
+        return requiredExpr;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
     /**
      * Determines if the pack should be preselected for installation.
      *
@@ -367,6 +420,17 @@ public class Pack implements Serializable
         this.preselected = preselected;
     }
 
+
+    /**
+     * Determines if the pack should be read only.
+     *
+     * @param preselected if {@code true}, the pack should be read only
+     */
+    public void setReadonly(boolean readonly)
+    {
+        this.readonly = readonly;
+    }
+
     /**
      * Determines if the pack should be preselected for installation.
      *
@@ -375,6 +439,26 @@ public class Pack implements Serializable
     public boolean isPreselected()
     {
         return preselected;
+    }
+
+    public String getPreselectedExpr()
+    {
+        return preselectedExpr;
+    }
+
+    /**
+     * Determines if the pack should be read only.
+     *
+     * @return {@code true} if the pack should be read only
+     */
+    public boolean isReadonly()
+    {
+        return readonly;
+    }
+
+    public String getReadonlyExpr()
+    {
+        return readonlyExpr;
     }
 
     /**
@@ -659,7 +743,7 @@ public class Pack implements Serializable
     }
 
     /**
-     * To a String (useful for JLists).
+     * To a String (usefull for JLists).
      *
      * @return the string representation of the pack
      */
@@ -736,15 +820,26 @@ public class Pack implements Serializable
             this.onDeselectPacks.put(name, condition);
         }
     }
-
     public Map<String, String> getOnDeselect()
     {
         return this.onDeselectPacks;
     }
-
     @Override
     public boolean equals(Object obj)
     {
         return super.equals(obj) || obj instanceof Pack && name.equals(((Pack) obj).getName());
     }
+
+    public void setRequiredExpr(String requiredExpr) {
+        this.requiredExpr = requiredExpr;
+    }
+
+    public void setPreselectedExpr(String preselectedExpr) {
+        this.preselectedExpr = preselectedExpr;
+    }
+
+    public void setReadonlyExpr(String readonlyExpr) {
+        this.readonlyExpr = readonlyExpr;
+    }
+
 }

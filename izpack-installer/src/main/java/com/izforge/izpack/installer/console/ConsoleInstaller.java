@@ -29,6 +29,8 @@ import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.data.ConsoleInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
+import com.izforge.izpack.installer.gui.InstallerFrame;
+import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.PrivilegedRunner;
@@ -81,7 +83,7 @@ public class ConsoleInstaller implements InstallerBase
     private final Housekeeper housekeeper;
 
     /**
-     * Whether the console installation has been aborted by the user
+     * The logger.
      */
     private boolean interrupted = false;
 
@@ -91,6 +93,7 @@ public class ConsoleInstaller implements InstallerBase
      *
      * @param panels              the panels
      * @param installData         the installation data
+     * @param requirements        the installation requirements
      * @param uninstallDataWriter the uninstallation data writer
      * @param console             the console
      * @param housekeeper         the house-keeper
@@ -122,7 +125,7 @@ public class ConsoleInstaller implements InstallerBase
      * This method does not return - it invokes {@code System.exit(0)} on successful installation, or
      * {@code System.exit(1)} on failure.
      *
-     * @param type the type of the console action to perform
+     * @param type the type of the action to perform
      * @param path the path to use for the action. May be <tt>null</tt>
      */
     public void run(ConsoleInstallerAction type, String path, String[] args)

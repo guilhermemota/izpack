@@ -1,5 +1,14 @@
 /*
- * Copyright 2016 Julien Ponge, René Krell and the IzPack team.
+ * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
+ *
+ * http://izpack.org/
+ * http://izpack.codehaus.org/
+ *
+ * Copyright 2001 Johannes Lehtinen
+ * Copyright 2002 Paul Wilkinson
+ * Copyright 2004 Gaganis Giorgos
+ * Copyright 2007 Syed Khadeer / Hans Aikema
+ *
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -217,11 +226,17 @@ public class CompilerConfig extends Thread
     private final CompilerClassLoader classLoader;
 
     private static final String TEMP_DIR_ELEMENT_NAME = "tempdir";
+
     private static final String TEMP_DIR_PREFIX_ATTRIBUTE = "prefix";
+
     private static final String DEFAULT_TEMP_DIR_PREFIX = "IzPack";
+
     private static final String TEMP_DIR_SUFFIX_ATTRIBUTE = "suffix";
+
     private static final String DEFAULT_TEMP_DIR_SUFFIX = "Install";
+
     private static final String TEMP_DIR_VARIABLE_NAME_ATTRIBUTE = "variablename";
+
     private static final String TEMP_DIR_DEFAULT_PROPERTY_NAME = "TEMP_DIRECTORY";
 
     /**
@@ -779,8 +794,7 @@ public class CompilerConfig extends Thread
      * Helper method to recursively add more packs from refpack XML packs definitions
      *
      * @param data The XML data
-     * @param baseDir the base directory of the pack
-     * @throws CompilerException an error occured during compiling
+     * @throws CompilerException
      */
     private void addPacksSingle(IXMLElement data, File baseDir) throws CompilerException
     {
@@ -807,10 +821,13 @@ public class CompilerConfig extends Thread
 
             boolean loose = Boolean.parseBoolean(packElement.getAttribute("loose", "false"));
             String description = xmlCompilerHelper.requireChildNamed(packElement, "description").getContent();
-            boolean required = xmlCompilerHelper.requireYesNoAttribute(packElement, "required");
+            boolean required = xmlCompilerHelper.requireYesNoAttributeDynamic(packElement, "required");
             String group = packElement.getAttribute("group");
             String installGroups = packElement.getAttribute("installGroups");
             String excludeGroup = packElement.getAttribute("excludeGroup");
+            String requiredExpr = packElement.getAttribute("required");
+            String preselectedExpr = packElement.getAttribute("preselected");
+            String readonlyExpr = packElement.getAttribute("readonly");
             boolean uninstall = xmlCompilerHelper.validateYesNoAttribute(packElement, "uninstall", YES);
             long size = xmlCompilerHelper.getLong(packElement, "size", 0);
             String parent = packElement.getAttribute("parent");
@@ -905,6 +922,10 @@ public class CompilerConfig extends Thread
             selectionCondition.setId("izpack.selected." + name);
             selectionCondition.setPack(name);
             rules.addCondition(selectionCondition);
+
+            pack.setRequiredExpr(requiredExpr);
+            pack.setPreselectedExpr(preselectedExpr);
+            pack.setReadonlyExpr(readonlyExpr);
 
             logAddingPack(pack);
 
@@ -1050,8 +1071,8 @@ public class CompilerConfig extends Thread
 
     /**
      * Process onSelect tags within pack tags
-     * @param packElement pack XML element
-     * @param pack object holding pack information
+     * @param packElement
+     * @param pack
      */
     private void processOnSelect(IXMLElement packElement, PackInfo pack)
     {
@@ -1065,8 +1086,8 @@ public class CompilerConfig extends Thread
 
     /**
      * Process onDeselect tags within pack tags
-     * @param packElement pack XML element
-     * @param pack object holding pack information
+     * @param packElement
+     * @param pack
      */
     private void processOnDeselect(IXMLElement packElement, PackInfo pack)
     {
@@ -1599,7 +1620,7 @@ public class CompilerConfig extends Thread
      * Add files in an archive to a pack
      *
      * @param archive     the archive file to unpack
-     * @param targetDir   the target directory where the content of the archive will be installed
+     * @param targetdir   the target directory where the content of the archive will be installed
      * @param osList      The target OS constraints.
      * @param override    Overriding behaviour.
      * @param pack        Pack to be packed into
@@ -2414,7 +2435,7 @@ public class CompilerConfig extends Thread
      * Builds the Info class from the XML tree (part that sets just strings).
      *
      * @param data The XML data. return The Info.
-     * @throws CompilerException an error occured during compiling
+     * @throws Exception Description of the Exception
      */
     private void addInfoStrings(IXMLElement data)
     {
@@ -2601,7 +2622,7 @@ public class CompilerConfig extends Thread
                 info.addTempDir(new TempDir(variableName, prefix, suffix));
             }
         }
-
+        
         packager.setInfo(info);
         notifyCompilerListener("addInfoStrings", CompilerListener.END, data);
     }
@@ -2611,6 +2632,7 @@ public class CompilerConfig extends Thread
      * Builds the Info class from the XML tree (part that sets conditions).
      *
      * @param data The XML data. return The Info.
+     * @throws Exception Description of the Exception
      */
     private void addInfoConditional(IXMLElement data)
     {
@@ -2674,8 +2696,9 @@ public class CompilerConfig extends Thread
             if (privileged != null)
             {
                 // default behavior for uninstaller elevation: elevate if installer has to be elevated too
-                info.setRequirePrivilegedExecutionUninstaller(
-                        xmlCompilerHelper.validateYesNoAttribute(privileged,"uninstaller", YES));
+                info.setRequirePrivilegedExecutionUninstaller(xmlCompilerHelper.validateYesNoAttribute(privileged,
+                                                                                                       "uninstaller",
+                                                                                                       YES));
             }
 
             if (uninstallInfo != null)
@@ -3142,7 +3165,7 @@ public class CompilerConfig extends Thread
      * Parse conditions and add them to the compiler.
      *
      * @param data the conditions configuration
-     * @throws CompilerException an error occured during compiling
+     * @throws CompilerException
      */
     private void addConditions(IXMLElement data) throws CompilerException
     {
@@ -3335,7 +3358,8 @@ public class CompilerConfig extends Thread
      *
      * @param blockableElement the blockable XML element to parse
      * @param osList           constraint list to maintain and return
-     * @throws CompilerException an error occured during compiling
+     * @return blockable level
+     * @throws CompilerException
      */
     private Blockable getBlockableValue(IXMLElement blockableElement, List<OsModel> osList) throws CompilerException
     {
@@ -3512,7 +3536,7 @@ public class CompilerConfig extends Thread
      *    &lt;res src=&quot;/tmp/izpp47881.tmp&quot; id=&quot;packsLang.xml&quot;/&gt;
      * </pre>
      *
-     * @throws CompilerException an error occured during compiling
+     * @throws CompilerException
      */
     private void addMergedTranslationResources(Map<String, List<URL>> resourceUrlMap) throws CompilerException
     {
@@ -3607,9 +3631,9 @@ public class CompilerConfig extends Thread
     /**
      * Adds panel actions configured in an XML element to a panel.
      *
-     * @param xmlPanel the panel XML element
+     * @param xmlPanel the panel configuration
      * @param panel    the panel
-     * @throws CompilerException an error occured during compiling
+     * @throws CompilerException
      */
     private void addPanelActions(IXMLElement xmlPanel, Panel panel) throws CompilerException
     {

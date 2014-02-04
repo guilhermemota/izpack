@@ -74,7 +74,7 @@ public abstract class AbstractPanelView<T> implements PanelView<T>
     private boolean visible = true;
 
     /**
-     * Ordered list of panel data validators
+     * The data validator. May be {@code null}.
      */
     private List<DataValidator> validators = new ArrayList<DataValidator>();
 
@@ -442,7 +442,6 @@ public abstract class AbstractPanelView<T> implements PanelView<T>
      * validation or not.
      *
      * @param validator   the validator to evaluate
-     * @param index   the index in the list of validators for finding its appropriate validator condition
      * @param installData the installation data
      * @return {@code true} if the validator evaluated successfully, or with a warning that the user chose to skip;
      *         otherwise {@code false}
@@ -500,7 +499,6 @@ public abstract class AbstractPanelView<T> implements PanelView<T>
     private boolean isValid(DataValidator validator, InstallData installData)
     {
         boolean result = false;
-
         DataValidator.Status status = validator.validateData(installData);
         logger.fine("Panel " + getPanelId() + ": Data validation status=" + status + " (" + validator.getClass().getName() + ")");
 
@@ -674,6 +672,10 @@ public abstract class AbstractPanelView<T> implements PanelView<T>
             panelRoot.setAttribute(AutomatedInstallData.AUTOINSTALL_PANELROOT_ATTR_ID, panelId);
         }
         return panelRoot;
+    }
+
+    public InstallData getInstallData() {
+        return this.installData;
     }
 
 }

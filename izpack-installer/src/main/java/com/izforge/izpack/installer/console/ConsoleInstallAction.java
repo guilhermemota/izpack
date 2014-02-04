@@ -23,6 +23,7 @@ package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
+import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.util.Console;
 
 /**
@@ -61,6 +62,7 @@ public class ConsoleInstallAction extends AbstractInstallAction
     public boolean run(ConsolePanelView panel)
     {
         ConsolePanel view = panel.getView();
+        InstallerFrame.revaluateDynamicAttributes(getInstallData());
         return view.run(getInstallData(), console);
     }
 

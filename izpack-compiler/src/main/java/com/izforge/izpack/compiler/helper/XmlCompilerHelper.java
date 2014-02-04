@@ -133,6 +133,12 @@ public class XmlCompilerHelper
         return validateYesNoAttribute(element, attribute, null);
     }
 
+    public boolean requireYesNoAttributeDynamic(IXMLElement element, String attribute)
+            throws CompilerException
+    {
+        return validateYesNoAttribute(element, attribute, false);
+    }
+
     /**
      * Call getAttribute on an element, producing a meaningful warning if not "yes", "no", "true" or "false".
      * If the 'element' or 'attribute' are null, the default value is returned.
