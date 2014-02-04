@@ -743,10 +743,13 @@ public class CompilerConfig extends Thread
 
             boolean loose = Boolean.parseBoolean(packElement.getAttribute("loose", "false"));
             String description = xmlCompilerHelper.requireChildNamed(packElement, "description").getContent();
-            boolean required = xmlCompilerHelper.requireYesNoAttribute(packElement, "required");
+            boolean required = xmlCompilerHelper.requireYesNoAttributeDynamic(packElement, "required");
             String group = packElement.getAttribute("group");
             String installGroups = packElement.getAttribute("installGroups");
             String excludeGroup = packElement.getAttribute("excludeGroup");
+            String requiredExpr = packElement.getAttribute("required");
+            String preselectedExpr = packElement.getAttribute("preselected");
+            String readonlyExpr = packElement.getAttribute("readonly");
             boolean uninstall = "yes".equalsIgnoreCase(packElement.getAttribute("uninstall", "yes"));
             long size = xmlCompilerHelper.getLong(packElement, "size", 0);
             String parent = packElement.getAttribute("parent");
@@ -830,6 +833,10 @@ public class CompilerConfig extends Thread
                 pack.addValidator(type.getName());
             }
 
+            pack.setRequiredExpr(requiredExpr);
+            pack.setPreselectedExpr(preselectedExpr);
+            pack.setReadonlyExpr(readonlyExpr);
+            
             // We add the pack
             packager.addPack(pack);
         }

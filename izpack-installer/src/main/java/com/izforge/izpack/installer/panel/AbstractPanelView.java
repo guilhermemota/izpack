@@ -537,4 +537,8 @@ public abstract class AbstractPanelView<T> implements PanelView<T>
         return message;
     }
 
+    public InstallData getInstallData() {
+        return this.installData;
+    }
+
 }

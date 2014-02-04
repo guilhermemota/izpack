@@ -363,4 +363,17 @@ public class PackInfo implements Serializable
     {
         pack.addValidator(validatorClassName);
     }
+
+    public void setRequiredExpr(String requiredExpr) {
+        pack.setRequiredExpr(requiredExpr);
+    }
+
+    public void setPreselectedExpr(String preselectedExpr) {
+        pack.setPreselectedExpr(preselectedExpr);
+    }
+
+    public void setReadonlyExpr(String readonlyExpr) {
+        pack.setReadonlyExpr(readonlyExpr);
+    }
+
 }

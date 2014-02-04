@@ -35,6 +35,7 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
+import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.Housekeeper;
