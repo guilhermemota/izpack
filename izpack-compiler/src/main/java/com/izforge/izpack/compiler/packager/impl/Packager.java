@@ -80,6 +80,9 @@ public class Packager extends PackagerBase
      * @param properties        the properties
      * @param listener          the packager listener
      * @param jarOutputStream   the installer jar output stream
+     * @param compressor        the pack compressor
+     * @param outputStream      decoration of the installer jar stream. May be
+     *                          compressed or not depending on the compiler data.
      * @param mergeManager      the merge manager
      * @param pathResolver      the path resolver
      * @param mergeableResolver the mergeable resolver
@@ -178,14 +181,14 @@ public class Packager extends PackagerBase
 
                     // use a back reference if file was in previous pack, and in
                     // same jar
-                    PackFile linkedPackFile = storedFiles.get(file);
-                    if (linkedPackFile != null && !packSeparateJars())
-                    {
-                        // Save backreference link
-                        logger.fine("File " + packFile.getTargetPath() + " is a backreference, linked to " + linkedPackFile.getTargetPath());
-                        packFile.setLinkedPackFile(linkedPackFile);
-                        addFile = false;
-                    }
+//                    PackFile linkedPackFile = storedFiles.get(file);
+//                    if (linkedPackFile != null && !packSeparateJars())
+//                    {
+//                        // Save backreference link
+//                        logger.fine("File " + packFile.getTargetPath() + " is a backreference, linked to " + linkedPackFile.getTargetPath());
+//                        packFile.setLinkedPackFile(linkedPackFile);
+//                        addFile = false;
+//                    }
 
                     if (addFile && !packFile.isDirectory())
                     {
