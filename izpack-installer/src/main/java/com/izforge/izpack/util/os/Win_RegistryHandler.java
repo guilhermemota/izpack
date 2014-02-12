@@ -22,6 +22,12 @@
 
 package com.izforge.izpack.util.os;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+
 import com.coi.tools.os.izpack.Registry;
 import com.coi.tools.os.win.RegDataContainer;
 import com.izforge.izpack.api.exception.NativeLibException;
@@ -30,9 +36,6 @@ import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.util.Librarian;
-
-import java.util.List;
-import java.util.Properties;
 
 /**
  * This is the Microsoft Windows specific implementation of <code>RegistryHandler</code>.
@@ -90,6 +93,23 @@ public class Win_RegistryHandler extends RegistryHandler
                 catch (Exception e)
                 {
                     // ignore
+                }
+                if(key.equals("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment") && value.equals("PATH")) {
+                    String[] subPaths = contents.split(";");
+                    List<String> fixedSubPaths = new ArrayList<String>();
+                    for (String subPath : subPaths) {
+                        if (subPath.length() > 0 && !fixedSubPaths.contains(subPath)) {
+                            fixedSubPaths.add(subPath);
+                        }
+                    }
+                    StringBuilder fixedContents = new StringBuilder();
+                    if ( fixedSubPaths.size() > 0 ) {
+                        fixedContents.append(fixedSubPaths.get(0));
+                        for (int i = 1 ; i < fixedSubPaths.size() ; i++) {
+                            fixedContents.append(";").append(fixedSubPaths.get(i));
+                        }
+                    }
+                    contents = fixedContents.toString();
                 }
             }
         }
