@@ -94,12 +94,12 @@ public class InstallationGroupPanel extends IzPanel
      * HashMap<String, Pack> of the GUIInstallData.availablePacks
      */
     private HashMap<String, Pack> packsByName;
-    private TableModel groupTableModel;
-    private JTextPane descriptionField;
+    protected TableModel groupTableModel;
+    protected JTextPane descriptionField;
     private JScrollPane groupScrollPane;
     private JTable groupsTable;
-    private GroupData[] rows;
-    private int selectedGroup = -1;
+    protected GroupData[] rows;
+    protected int selectedGroup = -1;
 
 
     /**
