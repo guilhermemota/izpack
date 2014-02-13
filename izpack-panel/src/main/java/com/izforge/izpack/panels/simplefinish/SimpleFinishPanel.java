@@ -134,31 +134,36 @@ public class SimpleFinishPanel extends IzPanel
                                     parent.getIcons().get("stop"), LEADING));
             add(IzPanelLayout.createVerticalStrut(5));
             add(LabelFactory.create(getString("FinishPanel.fail.check.file"), null, LEADING), NEXT_LINE);
-            JLabel tempLogFileLabel = LabelFactory.create("<HTML><BODY><A HREF='#'>"+tempLogFile+"</A></BODY></HTML>", null, LEADING);
-            tempLogFileLabel.setToolTipText(tempLogFilePath);
-            tempLogFileLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            tempLogFileLabel.addMouseListener( new MouseListener() {
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                }
-                @Override
-                public void mousePressed(MouseEvent e) {
-                }
-                @Override
-                public void mouseExited(MouseEvent e) {
-                }
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                }
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    try {
-                        Desktop.getDesktop().open(new File(tempLogFilePath));
-                    } catch (Exception exc) {
-                        throw new RuntimeException(exc.getMessage(), exc);
+            JLabel tempLogFileLabel;
+            if (Desktop.isDesktopSupported()) {
+                tempLogFileLabel = LabelFactory.create("<HTML><BODY><A HREF='#'>"+tempLogFile+"</A></BODY></HTML>", null, LEADING);
+                tempLogFileLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                tempLogFileLabel.addMouseListener( new MouseListener() {
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
                     }
-                }
-            });
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                    }
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                    }
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                    }
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        try {
+                            Desktop.getDesktop().open(new File(tempLogFilePath));
+                        } catch (Exception exc) {
+                            throw new RuntimeException(exc.getMessage(), exc);
+                        }
+                    }
+                });
+            } else {
+                tempLogFileLabel = LabelFactory.create(tempLogFile, null, LEADING);
+            }
+            tempLogFileLabel.setToolTipText(tempLogFilePath);
             add(tempLogFileLabel, NEXT_LINE);
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
