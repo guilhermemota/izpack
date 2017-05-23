@@ -131,9 +131,16 @@ public class FileInputField extends JPanel implements ActionListener
 
     public boolean validateField()
     {
-        String path = filetxt.getText();
+        String path = filetxt.getText().trim();
+
+        if (path.isEmpty()) {
+            return view.validate(path);
+        }
+
         File file = field.getAbsoluteFile(path);
+
         filetxt.setText(file.getPath());
+
         return view.validate(filetxt.getText());
     }
 
