@@ -116,7 +116,7 @@ public class Pack implements Serializable
     /**
      * True if the pack is required.
      */
-    private final boolean required;
+    private boolean required;
 
     /**
      * Original value for attribute "required" from "install-script.xml".

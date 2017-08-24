@@ -49,6 +49,7 @@
             <xs:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:choice>
         <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="condition" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="keyType">
@@ -98,6 +99,7 @@
             </xs:annotation>
         </xs:attribute>
         <xs:attribute name="keypath" type="xs:string" use="required"/>
+        <xs:attribute name="saveprevious" type="xs:string" use="optional"/>
         <xs:attribute name="root" use="required">
             <xs:simpleType>
                 <xs:restriction base="xs:NMTOKEN">

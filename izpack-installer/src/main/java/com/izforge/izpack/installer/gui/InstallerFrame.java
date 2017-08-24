@@ -25,7 +25,7 @@ package com.izforge.izpack.installer.gui;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.Pack
+import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.event.ProgressListener;
@@ -689,10 +689,12 @@ public class InstallerFrame extends JFrame implements InstallerBase, InstallerVi
 
         boolean confirmQuit;
         Panel panel = panels.getPanel();
-        if (panel.getConfirmQuitType() == Panel.ConfirmQuitType.DYNAMIC)
+        if (panel.getConfirmQuitType() == Panel.ConfirmQuitType.DYNAMIC) {
             confirmQuit = !(installdata.isCanClose() || (!navigator.isNextEnabled() && !navigator.isPreviousEnabled()));
-        else
+        }
+        else {
             confirmQuit = (panel.getConfirmQuitType() == Panel.ConfirmQuitType.CONFIRM);
+        }
         if (!confirmQuit)
         {
             if (!writeUninstallData())
@@ -1499,11 +1501,15 @@ public class InstallerFrame extends JFrame implements InstallerBase, InstallerVi
      */
     private void confirmExit()
     {
-        if (unpacker.isInterruptDisabled() && interruptCount < MAX_INTERRUPT)
-        { // But we should not interrupt.
-            interruptCount++;
-            return;
-        }
+
+//        Código comentado para que não seja necessário precionar 3 vezes o botão quit
+//        para cancelar uma instalação que já está completa.
+//
+//        if (unpacker.isInterruptDisabled() && interruptCount < MAX_INTERRUPT)
+//        { // But we should not interrupt.
+//            interruptCount++;
+//            return;
+//        }
 
         Messages messages = locales.getMessages();
 

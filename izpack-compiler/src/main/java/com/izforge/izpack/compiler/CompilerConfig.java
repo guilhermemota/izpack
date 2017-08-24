@@ -923,11 +923,11 @@ public class CompilerConfig extends Thread
             selectionCondition.setPack(name);
             rules.addCondition(selectionCondition);
 
+            logAddingPack(pack);
+
             pack.setRequiredExpr(requiredExpr);
             pack.setPreselectedExpr(preselectedExpr);
             pack.setReadonlyExpr(readonlyExpr);
-
-            logAddingPack(pack);
 
             // We add the pack
             packager.addPack(pack);

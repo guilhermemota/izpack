@@ -61,6 +61,65 @@ public class FileUtil
     }
 
     /**
+     * Searches case sensitively, and returns true if the given SearchString occurs in the
+     * first File with the given Filename.
+     *
+     * @param aFileName     A files name
+     * @param aSearchString the string search for
+     * @return true if found in the file otherwise false
+     */
+    public static boolean fileContains(String aFileName, String aSearchString)
+    {
+        return (fileContains(aFileName, aSearchString, false));
+    }
+
+    /**
+     * Tests if the given File contains the given Search String
+     *
+     * @param aFileName             A files name
+     * @param aSearchString         the String to search for
+     * @param caseInSensitiveSearch If false the Search is casesensitive
+     * @return true if found in the file otherwise false
+     */
+    public static boolean fileContains(String aFileName, String aSearchString,
+                                       boolean caseInSensitiveSearch)
+    {
+        boolean result = false;
+
+        String searchString = caseInSensitiveSearch
+                ? aSearchString.toLowerCase() : aSearchString;
+
+        List<String> fileContent = new ArrayList<String>();
+
+        try
+        {
+            fileContent = getFileContent(aFileName);
+        }
+        catch (IOException e)
+        {
+            // TODO handle Exception
+            e.printStackTrace();
+        }
+
+        for (String currentline : fileContent)
+        {
+            if (caseInSensitiveSearch)
+            {
+                currentline = currentline.toLowerCase();
+            }
+
+            if (currentline.contains(searchString))
+            {
+                result = true;
+
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Gets the content from a File as StringArray List.
      *
      * @param fileName A file to read from.

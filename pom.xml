@@ -23,32 +23,40 @@
     <url>https://github.com/izpack/izpack</url>
     <connection>scm:git:git://github.com/izpack/izpack.git</connection>
     <developerConnection>scm:git:git@github.com:izpack/izpack.git</developerConnection>
-    <tag>izpack-5.1.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
     <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus snapshot repository</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>${distMgmtSnapshotsId}</id>
+      <name>${distMgmtSnapshotsName}</name>
+      <url>${distMgmtSnapshotsUrl}</url>
     </snapshotRepository>
     <!-- We do not deploy directly to the staging repository, but via the Nexus staging plugin -->
-    <!--
     <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Sonatype Nexus release repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      <id>${distMgmtReleaseId}</id>
+	  <name>${distMgmtReleaseName}</name>
+      <url>${distMgmtReleaseUrl}</url>
     </repository>
-    -->
   </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- Maven 2 confuses the usage of the Nexus staging plugin and would require further customization -->
     <mavenVersion>3.0</mavenVersion>
-    <skipTests>false</skipTests>
-    <skipUnitTests>${skipTests}</skipUnitTests>
-    <skipIntegrationTests>${skipTests}</skipIntegrationTests>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mavenVersion>2.2.1</mavenVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <distMgmtReleaseId>central</distMgmtReleaseId>
+        <distMgmtReleaseName>Central Repository</distMgmtReleaseName>
+        <distMgmtReleaseUrl>http://ger-redes.datacom.net/nexus/content/repositories/thirdparty/</distMgmtReleaseUrl>
+        <distMgmtSnapshotsId>central-snapshots</distMgmtSnapshotsId>
+        <distMgmtSnapshotsName>Central Repository</distMgmtSnapshotsName>
+        <distMgmtSnapshotsUrl>http://ger-redes.datacom.net/nexus/content/repositories/3rd-party-snapshots/</distMgmtSnapshotsUrl>
+        <maven.source.classifier>sources-datacom</maven.source.classifier>
+        <skipTests>false</skipTests>
+        <skipUnitTests>${skipTests}</skipUnitTests>
+        <skipIntegrationTests>${skipTests}</skipIntegrationTests>
   </properties>
 
   <modules>
@@ -70,7 +78,6 @@
     <module>izpack-ant</module>
     <module>izpack-test-common</module>
     <module>izpack-test-listener</module>
-    <module>reports</module>
   </modules>
 
   <dependencyManagement>
@@ -396,20 +403,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mavenVersion>2.2.1</mavenVersion>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <distMgmtReleaseId>central</distMgmtReleaseId>
-        <distMgmtReleaseName>Central Repository</distMgmtReleaseName>
-        <distMgmtReleaseUrl>http://ger-redes.datacom.net/nexus/content/repositories/thirdparty/</distMgmtReleaseUrl>
-        <distMgmtSnapshotsId>central-snapshots</distMgmtSnapshotsId>
-        <distMgmtSnapshotsName>Central Repository</distMgmtSnapshotsName>
-        <distMgmtSnapshotsUrl>http://ger-redes.datacom.net/nexus/content/repositories/3rd-party-snapshots/</distMgmtSnapshotsUrl>
-        <maven.source.classifier>sources-datacom</maven.source.classifier>
-    </properties>
 
   <build>
     <plugins>

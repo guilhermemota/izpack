@@ -611,9 +611,10 @@
         <xs:attribute name="id" type="xs:string"/>
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="packImgId" type="xs:string" use="optional"/>
-        <xs:attribute name="required" type="types:yesNoTrueFalseType"/>
+        <xs:attribute name="required" type="xs:string"/>
         <xs:attribute name="hidden" type="xs:boolean" default="false"/>
-        <xs:attribute name="preselected" type="types:yesNoTrueFalseType" use="optional"/>
+        <xs:attribute name="preselected" type="xs:string" use="optional"/>
+        <xs:attribute name="readonly" type="xs:string" use="optional"/>
         <xs:attribute name="loose" type="xs:boolean" use="optional"/>
         <xs:attribute name="uninstall" type="types:yesNoTrueFalseType" use="optional"/>
         <xs:attribute name="condition" type="xs:string" use="optional"/>

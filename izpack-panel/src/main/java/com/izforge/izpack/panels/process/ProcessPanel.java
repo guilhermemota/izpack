@@ -173,6 +173,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
                 overallProgressBar.setMaximum(no_of_jobs);
                 overallProgressBar.setIndeterminate(true);
                 parent.lockPrevButton();
+                parent.lockQuitButton();
             }
         });
     }
@@ -208,7 +209,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
                 {
                     parent.unlockPrevButton();
                 }
-
+                parent.unlockQuitButton();
                 // set to finished only in case of success
                 finishedWork = ProcessPanel.this.installData.isInstallSuccess();
             }
