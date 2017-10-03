@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.izpack</groupId>
   <artifactId>izpack</artifactId>
-  <version>5.1.1-DATACOM-SNAPSHOT</version>
+  <version>5.1.1-DATACOM</version>
   <packaging>pom</packaging>
   <name>IzPack parent</name>
   <description>
@@ -517,7 +517,7 @@
       </plugin>
 
       <!-- Deployment -->
-      <plugin>
+      <!--plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
         <version>1.6.8</version>
@@ -527,7 +527,7 @@
           <nexusUrl>https://oss.sonatype.org/</nexusUrl>
           <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
-      </plugin>
+      </plugin-->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

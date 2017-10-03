@@ -3,7 +3,7 @@
     <parent>
         <artifactId>izpack</artifactId>
         <groupId>org.codehaus.izpack</groupId>
-        <version>5.1.1-DATACOM-SNAPSHOT</version>
+        <version>5.1.1-DATACOM</version>
     </parent>    
     <modelVersion>4.0.0</modelVersion>
 
