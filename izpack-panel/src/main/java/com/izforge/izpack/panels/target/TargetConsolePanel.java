@@ -128,12 +128,13 @@ public class TargetConsolePanel extends PathInputConsolePanel implements Console
                 } else if (!normalizedPath.isEmpty())
                 {
 
-//                if ( !TargetPanelHelper.isValidPath(installData, path) ) {
-//                    console.println(installData.getMessages().get("installer.error") + ": "
-//                        + installData.getMessages().get("UserInputPanel.dir.notdirectory.caption") + ". "
-//                        + installData.getMessages().get("UserInputPanel.dir.nodirectory.message"));
-//                    return run(installData, console);
-// 
+                    if ( !TargetPanelHelper.isValidPath(installData, path) ) {
+                        console.println(installData.getMessages().get("installer.error") + ": "
+                        + installData.getMessages().get("UserInputPanel.dir.notdirectory.caption") + ". "
+                        + installData.getMessages().get("UserInputPanel.dir.nodirectory.message"));
+
+                        return run(installData, console);
+                    }
 
                     if (pathFile.isFile())
                     {

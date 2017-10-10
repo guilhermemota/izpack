@@ -160,20 +160,24 @@ public class PathInputPanel extends IzPanel implements ActionListener
     @Override
     public boolean isValidated()
     {
-        String path = getPath();
-        String normalizedPath = PathInputBase.normalizePath(path);
-        File file = new File(normalizedPath).getAbsoluteFile();
+        String chosenPath = pathSelectionPanel.getPath();
 
-        if (normalizedPath.length() == 0 && !checkEmptyPath())
+
+        if (chosenPath.isEmpty() /*&& !checkEmptyPath()*/)
         {
+
+            emitError(getString("installer.error"), getI18nStringForClass("empty_target_is_forbidden", "TargetPanel"));
             // Empty path disallowed
             return false;
         }
 
-        if ( !TargetPanelHelper.isValidPath(installData, path) ) {
+        if ( !TargetPanelHelper.isValidPath(installData, chosenPath) ) {
             emitError(getString("installer.error") + " - " + getString("UserInputPanel.dir.notdirectory.caption"), getString(getI18nStringForClass("dir.nodirectory.message", "UserInputPanel")));
             return false;
         }
+
+        String normalizedPath = PathInputBase.normalizePath(getPath());
+        File file = new File(normalizedPath).getAbsoluteFile();
 
         pathSelectionPanel.setPath(normalizedPath);
 

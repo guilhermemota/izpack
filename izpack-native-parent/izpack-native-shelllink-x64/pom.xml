@@ -4,7 +4,7 @@
     <parent>
         <artifactId>izpack-native-parent</artifactId>
         <groupId>org.codehaus.izpack</groupId>
-        <version>5.1.1-DATACOM</version>
+        <version>5.1.1-DATACOM-0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
