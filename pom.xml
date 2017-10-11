@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.izpack</groupId>
   <artifactId>izpack</artifactId>
-  <version>5.1.1-DATACOM-0-SNAPSHOT</version>
+  <version>5.1.1-DATACOM-0</version>
   <packaging>pom</packaging>
   <name>IzPack parent</name>
   <description>
