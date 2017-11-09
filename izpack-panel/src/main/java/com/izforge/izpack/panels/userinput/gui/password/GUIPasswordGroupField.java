@@ -118,7 +118,12 @@ public class GUIPasswordGroupField extends GUIField
 
         if (value != null)
         {
-            passwords.get(0).setText(replaceVariables(value));
+            /*
+             * Alteração necessária para que todos os campos de password sejam presenchidos.
+            */
+            for (JPasswordField field : passwords) {
+                field.setText(replaceVariables(value));
+            }
             result = true;
         }
         else
@@ -128,7 +133,12 @@ public class GUIPasswordGroupField extends GUIField
             String defaultValue = field.getDefaultValue();
             if (defaultValue != null)
             {
-                passwords.get(0).setText(defaultValue);
+                /*
+                 * Alteração necessária para que todos os campos de password sejam presenchidos.
+                */
+                for (JPasswordField fieldPass : passwords) {
+                    fieldPass.setText(defaultValue);
+                }
             }
         }
 
