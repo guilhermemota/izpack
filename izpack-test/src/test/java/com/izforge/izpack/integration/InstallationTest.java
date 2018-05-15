@@ -1,14 +1,16 @@
 package com.izforge.izpack.integration;
 
+import static com.izforge.izpack.integration.HelperTestMethod.initLangPack;
+import static com.izforge.izpack.integration.HelperTestMethod.prepareFrameFixture;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.awt.Image;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import org.fest.swing.fixture.FrameFixture;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsNull;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -33,7 +35,6 @@ import com.izforge.izpack.test.junit.PicoRunner;
 /**
  * Test for an installation
  */
-
 @RunWith(PicoRunner.class)
 @Container(TestGUIInstallationContainer.class)
 public class InstallationTest
@@ -76,10 +77,10 @@ public class InstallationTest
     public void testHelloAndFinishPanels() throws Exception
     {
         Image image = icons.get("JFrameIcon").getImage();
-        assertThat(image, IsNull.notNullValue());
+        assertThat(image, notNullValue());
 
-        languageDialog.initLangPack();
-        installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
+        initLangPack(languageDialog);
+        installerFrameFixture = prepareFrameFixture(installerFrame, installerController);
 
         // Hello panel
 //        installerFrameFixture.requireSize(new Dimension(640, 480));
@@ -95,10 +96,10 @@ public class InstallationTest
         installerController.buildInstallation();
 
         HelloPanel firstHelloPanel = (HelloPanel) installerContainer.getComponent("42");
-        assertThat(firstHelloPanel.getMetadata().getPanelId(), Is.is("42"));
+        assertThat(firstHelloPanel.getMetadata().getPanelId(), is("42"));
 
         HelloPanel secondHelloPanel = (HelloPanel) installerContainer.getComponent("34");
-        assertThat(secondHelloPanel.getMetadata().getPanelId(), Is.is("34"));
+        assertThat(secondHelloPanel.getMetadata().getPanelId(), is("34"));
     }
 
     @Test
@@ -108,16 +109,16 @@ public class InstallationTest
         installerController.buildInstallation();
 
         HelloPanel helloPanel = (HelloPanel) installerContainer.getComponent("hellopanel");
-        assertThat(helloPanel.getMetadata().getConfigurationOptionValue("config1", installData.getRules()), Is.is("value1"));
-        assertThat(helloPanel.getMetadata().getConfigurationOptionValue("config2", installData.getRules()), Is.is("value2"));
+        assertThat(helloPanel.getMetadata().getConfigurationOptionValue("config1", installData.getRules()), is("value1"));
+        assertThat(helloPanel.getMetadata().getConfigurationOptionValue("config2", installData.getRules()), is("value2"));
     }
 
     @Test
     @InstallFile("samples/substanceLaf/substanceLaf.xml")
     public void testSubstanceLaf() throws Exception
     {
-        languageDialog.initLangPack();
-        installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
+        initLangPack(languageDialog);
+        installerFrameFixture = prepareFrameFixture(installerFrame, installerController);
 
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
@@ -129,8 +130,8 @@ public class InstallationTest
     @InstallFile("samples/silverpeas/silverpeas.xml")
     public void testSilverpeas() throws Exception
     {
-        languageDialog.initLangPack();
-        installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
+        initLangPack(languageDialog);
+        installerFrameFixture = prepareFrameFixture(installerFrame, installerController);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         installerFrameFixture.requireVisible();
     }
@@ -167,7 +168,7 @@ public class InstallationTest
         // Lang picker
         HelperTestMethod.clickDefaultLang(languageDialog);
 
-        installerFrameFixture = HelperTestMethod.prepareFrameFixture(installerFrame, installerController);
+        installerFrameFixture = prepareFrameFixture(installerFrame, installerController);
         Thread.sleep(600);
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
@@ -203,9 +204,7 @@ public class InstallationTest
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).fileNameTextBox().enterText("auto.xml");
         Thread.sleep(300);
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();
-        assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
+        assertThat(new File(installPath, "auto.xml").exists(), is(true));
 //        installerFrameFixture.button(GuiId.BUTTON_QUIT.id).click();
     }
-
-
 }

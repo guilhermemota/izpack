@@ -347,11 +347,20 @@ public class GUIPrompt extends AbstractPrompt
         {
             buttons.add(reportButton);
         }
-        buttons.add(UIManager.getString(CLOSE_BUTTON));
+        final JButton closeButton = new JButton(UIManager.getString(CLOSE_BUTTON));
+        buttons.add(closeButton);
         JOptionPane pane = new JOptionPane(jPanel, type,
                 JOptionPane.YES_NO_OPTION, null,
                 buttons.toArray());
         final JDialog dialog = pane.createDialog(parent, title);
+        // event handler for the Close button
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event)
+            {
+                dialog.dispose();
+            }
+        });
         if (throwable != null)
         {
             // event handler for the Details button

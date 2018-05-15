@@ -19,12 +19,6 @@
 
 package com.izforge.izpack.compiler.resource;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.exception.CompilerException;
@@ -32,6 +26,12 @@ import com.izforge.izpack.compiler.data.CompilerData;
 import com.izforge.izpack.compiler.data.PropertyManager;
 import com.izforge.izpack.compiler.helper.AssertionHelper;
 import com.izforge.izpack.compiler.helper.XmlCompilerHelper;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * @author Anthonin Bonnefoy
@@ -62,14 +62,29 @@ public class ResourceFinder
      * @param parent the IXMLElement the resource is specified in, used to report errors
      * @return a URL to the resource.
      */
-    public URL findProjectResource(String path, String desc, IXMLElement parent)
-            throws CompilerException
+    public URL findProjectResource(String path, String desc, IXMLElement parent) throws CompilerException
+    {
+        return findProjectResource(new File(compilerData.getBasedir()), path, desc, parent);
+    }
+
+    /**
+     * Look for a project specified resources, which, if not absolute, are sought relative to the
+     * projects basedir. The path should use '/' as the fileSeparator. If the resource is not found,
+     * a CompilerException is thrown indicating fault in the parent element.
+     *
+     * @param basedir the base dir which relative paths will be resolved from
+     * @param path   the relative path (using '/' as separator) to the resource.
+     * @param desc   the description of the resource used to report errors
+     * @param parent the IXMLElement the resource is specified in, used to report errors
+     * @return a URL to the resource.
+     */
+    public URL findProjectResource(File basedir, String path, String desc, IXMLElement parent) throws CompilerException
     {
         URL url = null;
         File resource = new File(path);
         if (!resource.isAbsolute())
         {
-            resource = new File(compilerData.getBasedir(), path);
+            resource = new File(basedir, path);
         }
 
         if (!resource.exists()) // fatal

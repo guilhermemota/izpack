@@ -59,6 +59,11 @@ public class FieldProcessor
     private final String originalValueVariable;
 
     /**
+     * The name of the variable holding the processed value after processing (optional)
+     */
+    private final String toVariable;
+
+    /**
      * The original value before processing (optional)
      */
     private String originalValue;
@@ -85,7 +90,8 @@ public class FieldProcessor
     public FieldProcessor(IXMLElement processorElement, Config config)
     {
         className = config.getAttribute(processorElement, "class");
-        originalValueVariable = config.getAttribute(processorElement, "backupVariable");
+        originalValueVariable = config.getAttribute(processorElement, "backupVariable", true);
+        toVariable = config.getAttribute(processorElement, "toVariable", true);
         this.processorElement = processorElement;
         this.config = config;
     }
@@ -161,5 +167,10 @@ public class FieldProcessor
     public String getOriginalValue()
     {
         return originalValue;
+    }
+
+    public String getToVariable()
+    {
+        return toVariable;
     }
 }

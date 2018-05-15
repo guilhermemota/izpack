@@ -653,6 +653,83 @@ public class UserInputPanelTest extends AbstractPanelTest
         assertEquals("myhost", installData.getVariable("dynamicMasterAddress"));
     }
 
+    @Test
+    public void processorWithDefaultConfigurationShouldUpdateFieldProperty() throws Exception
+    {
+        // Set the base path in order to pick up com/izforge/izpack/panels/userinput/text/userInputSpec.xml
+        getResourceManager().setResourceBasePath("/com/izforge/izpack/panels/userinput/processors/");
+        InstallData installData = getInstallData();
+
+        // show the panel
+        FrameFixture frame = showUserInputPanel("processors");
+
+        JTextComponentFixture text1 = frame.textBox("processors1");
+        assertEquals("ProcessorOne", text1.text());
+        assertEquals("ProcessorOne", installData.getVariable("processors1"));
+
+        // attempt to navigate to the next panel
+        checkNavigateNext(frame);
+
+        assertEquals("Processed: ProcessorOne", installData.getVariable("processors1"));
+    }
+
+    @Test
+    public void processorWithToVariableShouldLeaveFieldPropertyUntouched() throws Exception
+    {
+        // Set the base path in order to pick up com/izforge/izpack/panels/userinput/text/userInputSpec.xml
+        getResourceManager().setResourceBasePath("/com/izforge/izpack/panels/userinput/processors/");
+        InstallData installData = getInstallData();
+
+        // show the panel
+        FrameFixture frame = showUserInputPanel("processors");
+        JTextComponentFixture textField = frame.textBox("processors2");
+
+        // attempt to navigate to the next panel
+        checkNavigateNext(frame);
+
+        assertEquals("ProcessorTwo", textField.text());
+        assertEquals("ProcessorTwo", installData.getVariable("processors2"));
+        assertEquals("Processed: ProcessorTwo", installData.getVariable("processors2.processed"));
+    }
+
+    @Test
+    public void fieldShouldBeAbleToHaveSeveralProcessors() throws Exception
+    {
+        // Set the base path in order to pick up com/izforge/izpack/panels/userinput/text/userInputSpec.xml
+        getResourceManager().setResourceBasePath("/com/izforge/izpack/panels/userinput/processors/");
+        InstallData installData = getInstallData();
+
+        // show the panel
+        FrameFixture frame = showUserInputPanel("processors");
+        JTextComponentFixture textField = frame.textBox("processors3");
+
+        // attempt to navigate to the next panel
+        checkNavigateNext(frame);
+
+        assertEquals("ProcessorThree", textField.text());
+        assertEquals("Processed: Processed: ProcessorThree", installData.getVariable("processors3"));
+    }
+
+    @Test
+    public void processorWithToVariableShouldNotGiveResultToFollowingProcessors() throws Exception
+    {
+        // Set the base path in order to pick up com/izforge/izpack/panels/userinput/text/userInputSpec.xml
+        getResourceManager().setResourceBasePath("/com/izforge/izpack/panels/userinput/processors/");
+        InstallData installData = getInstallData();
+
+        // show the panel
+        FrameFixture frame = showUserInputPanel("processors");
+        JTextComponentFixture textField = frame.textBox("processors4");
+
+        // attempt to navigate to the next panel
+        checkNavigateNext(frame);
+
+        assertEquals("ProcessorFour", textField.text());
+        assertEquals("Processed: ProcessorFour", installData.getVariable("processors4"));
+        assertEquals("Processed: ProcessorFour", installData.getVariable("processors4.processed.first"));
+        assertEquals("Processed: Processed: ProcessorFour", installData.getVariable("processors4.processed.second"));
+    }
+
     /**
      * Verifies that the named combo has the expected value.
      *

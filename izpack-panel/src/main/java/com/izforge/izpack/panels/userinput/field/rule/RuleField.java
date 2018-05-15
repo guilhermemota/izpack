@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.panels.userinput.field.rule;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.InstallData;
@@ -298,11 +299,21 @@ public class RuleField extends Field
      */
     private String formatProcessed(String[] values)
     {
-        String result;
-        FieldProcessor processor = getProcessor();
-        if (processor != null)
+        String result = null;
+        List<FieldProcessor> processors = getProcessors();
+        if (processors != null && !processors.isEmpty())
         {
-            result = processor.process(values);
+            for (final FieldProcessor processor : processors)
+            {
+                if (result == null)
+                {
+                    result = processor.process(values);
+                }
+                else
+                {
+                    result = processor.process(result);
+                }
+            }
         }
         else
         {

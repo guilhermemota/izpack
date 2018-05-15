@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.izpack</groupId>
   <artifactId>izpack</artifactId>
-  <version>5.1.1-DATACOM-1</version>
+  <version>5.1.2-DATACOM-0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>IzPack parent</name>
   <description>
@@ -35,7 +35,7 @@
     <!-- We do not deploy directly to the staging repository, but via the Nexus staging plugin -->
     <repository>
       <id>${distMgmtReleaseId}</id>
-	  <name>${distMgmtReleaseName}</name>
+      <name>${distMgmtReleaseName}</name>
       <url>${distMgmtReleaseUrl}</url>
     </repository>
   </distributionManagement>
@@ -78,6 +78,7 @@
     <module>izpack-ant</module>
     <module>izpack-test-common</module>
     <module>izpack-test-listener</module>
+    <module>reports</module>
   </modules>
 
   <dependencyManagement>
@@ -99,7 +100,7 @@
         <artifactId>picocontainer</artifactId>
         <version>2.15</version>
       </dependency>
-      
+
       <!-- PDF Panel -->
       <dependency>
         <groupId>org.apache.pdfbox</groupId>
@@ -125,19 +126,16 @@
         <artifactId>commons-lang3</artifactId>
         <version>3.5</version>
       </dependency>
-
       <dependency>
         <groupId>commons-cli</groupId>
         <artifactId>commons-cli</artifactId>
         <version>1.3.1</version>
       </dependency>
-
       <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>2.5</version>
       </dependency>
-
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-compress</artifactId>
@@ -159,8 +157,8 @@
         <version>1.9</version>
       </dependency>
 
-      <!-- Maven plugins libs -->
-      <dependency>
+      <!-- Maven API -->
+     <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-compat</artifactId>
         <version>3.2.5</version>

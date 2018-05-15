@@ -73,6 +73,7 @@
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="ask"/>
                     <xs:enumeration value="fail"/>
+		    <xs:enumeration value="ignore"/>                    
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>

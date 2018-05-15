@@ -28,6 +28,7 @@ import com.izforge.izpack.gui.TwoColumnConstraints;
 import com.izforge.izpack.panels.userinput.field.AbstractFieldView;
 import com.izforge.izpack.panels.userinput.field.Field;
 import com.izforge.izpack.util.HyperlinkHandler;
+import com.izforge.izpack.panels.userinput.gui.rule.RuleInputField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -277,6 +278,15 @@ public abstract class GUIField extends AbstractFieldView
                 {
                     untranslatedTooltips.put(Integer.valueOf(component.getComponent().hashCode()), tooltip);
                     component.getComponent().setToolTipText(tooltip);
+                    JComponent jc = component.getComponent();
+                    if (jc instanceof RuleInputField)
+                    {
+                        RuleInputField rif = (RuleInputField)jc;
+                        for (JTextField input : rif.getInputFields())
+                        {
+                            input.setToolTipText(tooltip);
+                        }
+                    }
                 }
             }
         }

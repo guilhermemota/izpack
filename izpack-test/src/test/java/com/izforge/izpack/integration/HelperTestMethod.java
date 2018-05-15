@@ -1,14 +1,15 @@
 package com.izforge.izpack.integration;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 import java.io.File;
 import java.io.IOException;
 
+import com.izforge.izpack.api.exception.IzPackException;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
-import org.hamcrest.core.Is;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.InstallData;
@@ -16,6 +17,8 @@ import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.language.LanguageDialog;
+
+import javax.swing.SwingUtilities;
 
 /**
  * Shared methods beetween tests classes
@@ -30,7 +33,7 @@ public class HelperTestMethod
     {
         File installPath = new File(installData.getDefaultInstallPath());
         FileUtils.deleteDirectory(installPath);
-        assertThat(installPath.exists(), Is.is(false));
+        assertThat(installPath.exists(), is(false));
         return installPath;
     }
 
@@ -40,6 +43,30 @@ public class HelperTestMethod
         fixture.button(GuiId.BUTTON_LANG_OK.id).click();
         // Seems necessary to unlock window
         fixture.cleanUp();
+    }
+
+    /**
+     * Invokes {@link LanguageDialog#initLangPack()} within the EDT.
+     *
+     * @param dialog The language dialog.
+     * @throws Exception If an error occurs.
+     */
+    public static void initLangPack(final LanguageDialog dialog) throws Exception
+    {
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+
+                try
+                {
+                    dialog.initLangPack();
+                }
+                catch (Exception e)
+                {
+                    throw new IzPackException(e);
+                }
+            }
+        });
     }
 
     /**
@@ -83,12 +110,12 @@ public class HelperTestMethod
         {
             Thread.sleep(500);
         }
-        assertThat(installPath.exists(), Is.is(true));
+        assertThat(installPath.exists(), is(true));
         UninstallData uninstallData = new UninstallData();
         for (String installedFile : uninstallData.getInstalledFilesList())
         {
             File file = new File(installedFile);
-            assertThat(file.exists(), Is.is(true));
+            assertThat(file.exists(), is(true));
         }
     }
 }

@@ -941,13 +941,13 @@ public class CompilerConfig extends Thread
             String selfcontained = refPackElement.getAttribute("selfcontained");
             boolean isselfcontained = Boolean.valueOf(selfcontained);
 
+            final File refFile = new File(refFileName);
+            final File packDir = new File(baseDir, refFile.getParent());
+
             // parsing ref-pack-set file
-            IXMLElement refXMLData = this.readRefPackData(refFileName, isselfcontained);
+            IXMLElement refXMLData = this.readRefPackData(packDir, refFile.getName(), isselfcontained);
 
-            final String refFilePath = new File(refFileName).getParent();
-            final File packDir = new File(baseDir, refFilePath);
-
-            logger.info("Reading refpack from " + refFileName + " in dir " + packDir);
+            logger.info("Reading refpack from " + refFile.getName() + " in dir " + packDir);
             // Recursively call myself to add all packs and refpacks from the reference XML
             addPacksSingle(refXMLData, packDir);
         }
@@ -978,7 +978,7 @@ public class CompilerConfig extends Thread
             ds.setBasedir(dir);
             ds.setCaseSensitive(true);
 
-            // loop through all found fils and handle them as normal refpack files
+            // loop through all found files and handle them as normal refpack files
             String[] files;
             try
             {
@@ -987,13 +987,14 @@ public class CompilerConfig extends Thread
                 files = ds.getIncludedFiles();
                 for (String file : files)
                 {
-                    String refFileName = new File(dir, file).toString();
+                    File refFile = new File(dir, file);
+                    File packDir = new File(baseDir, refFile.getParent());
 
                     // parsing ref-pack-set file
-                    IXMLElement refXMLData = this.readRefPackData(refFileName, false);
+                    IXMLElement refXMLData = this.readRefPackData(packDir, refFile.getName(), false);
 
                     // Recursively call myself to add all packs and refpacks from the reference XML
-                    addPacksSingle(refXMLData, baseDir);
+                    addPacksSingle(refXMLData, packDir);
                 }
             }
             catch (Exception e)
@@ -1536,13 +1537,13 @@ public class CompilerConfig extends Thread
         return matches;
     }
 
-    private IXMLElement readRefPackData(String refFileName, boolean isselfcontained)
+    private IXMLElement readRefPackData(File baseDir, String refFileName, boolean isselfcontained)
             throws CompilerException
     {
         File refXMLFile = new File(refFileName);
         if (!refXMLFile.isAbsolute())
         {
-            refXMLFile = new File(compilerData.getBasedir(), refFileName);
+            refXMLFile = new File(baseDir, refFileName);
         }
         if (!refXMLFile.canRead())
         {
@@ -1601,7 +1602,7 @@ public class CompilerConfig extends Thread
         substituteProperties(refXMLData);
 
         // call addResources to add the referenced XML resources to this installation
-        addResources(refXMLData);
+        addResources(refXMLData, baseDir);
 
         try
         {
@@ -1902,6 +1903,25 @@ public class CompilerConfig extends Thread
             return;
         }
 
+        // check if we can load the logging properties from an external file...
+        List<IXMLElement> configFiles = loggingElement.getChildrenNamed("configuration-file");
+        if (configFiles != null)
+        {
+            if (configFiles.size() > 1)
+            {
+                assertionHelper.parseError(loggingElement, "Logging configuration by external file may only be used once");
+            }
+            else if (configFiles.size() == 1)
+            {
+                IXMLElement configFileElement = configFiles.get(0);
+                String fileName = xmlCompilerHelper.requireAttribute(configFileElement, "file");
+                URL url = resourceFinder.findProjectResource(fileName, "Logging configuration from file", configFileElement);
+                packager.addResource(ResourceManager.DEFAULT_INSTALL_LOGGING_CONFIGURATION_RES, url);
+                return;
+            }
+        }
+
+        // ... and if not, create the logging properties ourselves
         Properties logConfig = null;
         final String globalLevel = loggingElement.getAttribute("level", "INFO");
         if (globalLevel != null)
@@ -1915,17 +1935,6 @@ public class CompilerConfig extends Thread
                 logConfig.setProperty("javax.swing.level", globalLevel);
                 logConfig.setProperty("sun.awt.level", globalLevel);
                 logConfig.setProperty("sun.awt.X11.level", globalLevel);
-            }
-        }
-
-        List<IXMLElement> configFiles = loggingElement.getChildrenNamed("configuration-file");
-        if (configFiles != null)
-        {
-            for (IXMLElement configFileElement : configFiles)
-            {
-                String fileName = xmlCompilerHelper.requireAttribute(configFileElement, "file");
-                URL url = resourceFinder.findProjectResource(fileName, "Logging configuration from file", configFileElement);
-                packager.addResource(ResourceManager.DEFAULT_INSTALL_LOGGING_CONFIGURATION_RES, url);
             }
         }
 
@@ -2012,6 +2021,7 @@ public class CompilerConfig extends Thread
         notifyCompilerListener("addLogging", CompilerListener.END, data);
     }
 
+
     /**
      * Adds the resources.
      *
@@ -2019,6 +2029,18 @@ public class CompilerConfig extends Thread
      * @throws CompilerException Description of the Exception
      */
     private void addResources(IXMLElement data) throws CompilerException
+    {
+        addResources(data, new File(compilerData.getBasedir()));
+    }
+
+    /**
+     * Adds the resources.
+     *
+     * @param data The XML data.
+     * @param baseDir the base directory which resources should be relatively loaded from
+     * @throws CompilerException Description of the Exception
+     */
+    private void addResources(IXMLElement data, File baseDir) throws CompilerException
     {
         notifyCompilerListener("addResources", CompilerListener.BEGIN, data);
 
@@ -2050,7 +2072,7 @@ public class CompilerConfig extends Thread
             }
 
             // basedir is not prepended if src is already an absolute path
-            URL originalUrl = resourceFinder.findProjectResource(src, "Resource", resNode);
+            URL originalUrl = resourceFinder.findProjectResource(baseDir, src, "Resource", resNode);
             URL url = originalUrl;
 
             InputStream is = null;

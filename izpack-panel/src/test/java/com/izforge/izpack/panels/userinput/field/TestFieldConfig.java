@@ -218,7 +218,7 @@ public class TestFieldConfig implements FieldConfig
      * @return the field processor, or {@code null} if none exists
      */
     @Override
-    public FieldProcessor getProcessor()
+    public List<FieldProcessor> getProcessors()
     {
         return null;
     }

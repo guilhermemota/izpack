@@ -159,7 +159,7 @@
                 <include name="utils/**/*"/>
             </fileset>
             <executable
-                    targetfile="$INSTALL_PATH/utils/wrappers/izpack2app/Mac-App-Template/Contents/MacOS/JavaApplicationStub"
+                    targetfile="$INSTALL_PATH/utils/wrappers/izpack2app/Mac-App-Template/Contents/MacOS/universalJavaApplicationStub"
                     stage="never"/>
         </pack>
 

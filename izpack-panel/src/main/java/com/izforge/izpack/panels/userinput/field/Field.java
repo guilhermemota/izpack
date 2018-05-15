@@ -81,9 +81,9 @@ public abstract class Field
     private final List<FieldValidator> validators;
 
     /**
-     * The field processor. May be {@code null}
+     * The field processors. May be {@code null}
      */
-    private final FieldProcessor processor;
+    private final List<FieldProcessor> processors;
 
     /**
      * The field label. May be {@code null}
@@ -162,7 +162,7 @@ public abstract class Field
         packs = config.getPacks();
         models = config.getOsModels();
         validators = config.getValidators();
-        processor = config.getProcessor();
+        processors = config.getProcessors();
         label = config.getLabel();
         description = config.getDescription();
         displayHidden = config.isDisplayHidden();
@@ -516,14 +516,30 @@ public abstract class Field
     private String process(String... values)
     {
         String result = null;
-        if (processor != null)
+        if (processors != null && !processors.isEmpty())
         {
-            processor.setInstallData(installData);
-            result = processor.process(values);
-            String backupVariable = processor.getBackupVariable();
-            if (backupVariable != null)
+            for (FieldProcessor processor : processors)
             {
-                installData.setVariable(backupVariable, processor.getOriginalValue());
+                processor.setInstallData(installData);
+                String processorResult;
+                if (result == null) {
+                    processorResult = processor.process(values);
+                } else {
+                    processorResult = processor.process(result);
+                }
+
+                String backupVariable = processor.getBackupVariable();
+                if (backupVariable != null)
+                {
+                    installData.setVariable(backupVariable, processor.getOriginalValue());
+                }
+                String toVariable = processor.getToVariable();
+                if (toVariable != null)
+                {
+                    installData.setVariable(toVariable, processorResult);
+                    processorResult = processor.getOriginalValue();
+                }
+                result = processorResult;
             }
         }
         else if (values.length > 0)
@@ -534,13 +550,13 @@ public abstract class Field
     }
 
     /**
-     * Returns the field processor.
+     * Returns the field processors.
      *
-     * @return the field processor. May be {@code null}
+     * @return the field processors. May be {@code null}
      */
-    public FieldProcessor getProcessor()
+    public List<FieldProcessor> getProcessors()
     {
-        return processor;
+        return processors;
     }
 
     /**

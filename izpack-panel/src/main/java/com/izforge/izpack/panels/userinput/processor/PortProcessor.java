@@ -27,7 +27,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 
 /**
- * Checks whether the value of the field comtemt is a port and is free. If false the next free port
+ * Checks whether the value of the field content is a port and is free. If false the next free port
  * will be searched.
  *
  * @author Thorsten Kamann <thorsten.kamann@planetes.de>

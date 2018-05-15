@@ -401,7 +401,7 @@ public class Platform
         String filteredPath = directoryPath;
         if (name == Name.WINDOWS)
         {
-            if (!directoryPath.matches("^[a-zA-Z]:.*"))
+            if (!directoryPath.matches("^([a-zA-Z]:|\\\\).*"))
             {
                 return false;
             }

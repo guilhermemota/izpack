@@ -239,7 +239,7 @@ public class PropertyManager
         packagerListener.packagerMsg("Loading " + fileName,
                 PackagerListener.MSG_VERBOSE);
 
-        FileInputStream fis = new FileInputStream("");
+        FileInputStream fis = new FileInputStream(fileName);
         try
         {
             props.load(fis);

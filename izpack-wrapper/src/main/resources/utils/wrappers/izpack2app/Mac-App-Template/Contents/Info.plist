@@ -9,7 +9,7 @@
   <key>CFBundleAllowMixedLocalizations</key>
   <string>true</string>
   <key>CFBundleExecutable</key>
-  <string>JavaApplicationStub</string>
+  <string>universalJavaApplicationStub</string>
   <key>CFBundleDevelopmentRegion</key>
   <string>English</string>
   <key>CFBundlePackageType</key>
@@ -20,7 +20,7 @@
   <string>6.0</string>
   <key>CFBundleIconFile</key>
   <string>izpack.icns</string>
-  <key>Java</key>
+  <key>JavaX</key>
   <dict>
     <key>MainClass</key>
     <string>com.izforge.izpack.installer.bootstrap.Installer</string>

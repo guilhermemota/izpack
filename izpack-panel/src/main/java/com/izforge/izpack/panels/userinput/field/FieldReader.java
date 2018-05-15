@@ -79,6 +79,11 @@ public class FieldReader extends ElementReader implements FieldConfig
     private static final String VALIDATOR = "validator";
 
     /**
+     * The processor element name.
+     */
+    private static final String PROCESSOR = "processor";
+
+    /**
      * The tooltip attribute name.
      */
     private static final String TOOLTIP = "tooltip";
@@ -268,16 +273,25 @@ public class FieldReader extends ElementReader implements FieldConfig
     {
         return getValidators(this.field);
     }
+
     /**
      * Returns the processor the field.
      *
      * @return the field processor, or {@code null} if none exists
      */
     @Override
-    public FieldProcessor getProcessor()
+    public List<FieldProcessor> getProcessors()
     {
-        IXMLElement element = (spec != null) ? spec.getFirstChildNamed("processor") : null;
-        return element != null ? new FieldProcessor(element, getConfig()) : null;
+        List<FieldProcessor> result = new ArrayList<FieldProcessor>();
+        if (spec != null)
+        {
+            Config config = getConfig();
+            for (IXMLElement element : spec.getChildrenNamed(PROCESSOR))
+            {
+                result.add(new FieldProcessor(element, config));
+            }
+        }
+        return result;
     }
 
     /**

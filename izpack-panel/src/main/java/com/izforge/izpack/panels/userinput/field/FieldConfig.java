@@ -138,7 +138,7 @@ public interface FieldConfig
      *
      * @return the field processor, or {@code null} if none exists
      */
-    FieldProcessor getProcessor();
+    List<FieldProcessor> getProcessors();
 
     /**
      * Returns the field description.
